@@ -1,0 +1,282 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 3 | Log in</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="{% static 'https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css' %}">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- Google Recaptcha     -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+        * {
+    margin: 0px;
+    font-family: Rubik;
+}
+
+.LoginPageContainer {
+    height: 100vh;
+    overflow: auto;
+}
+
+.LoginPageInnerContainer {
+    display: flex;
+    min-height: 100%;
+}
+
+.LoginPageInnerContainer .ImageContianer {
+    width: 55%;
+    background-color: #e1dfec;
+    min-height: 100%;
+    padding: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.LoginPageInnerContainer .ImageContianer .GroupImage {
+    width: 100%;
+    display: block;
+}
+
+.LoginPageInnerContainer .LoginFormContainer {
+    flex-grow: 2;
+    background-color: white;
+    min-height: 100%;
+    padding: 5%;
+    background: url(https://i.imgur.com/BKyjjFa.png) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.LoginPageInnerContainer .LoginFormContainer .LogoContainer .logo {
+    height: 60px;
+    margin-bottom: 30px;
+}
+
+.LoginPageInnerContainer .LoginFormContainer .header {
+    font-size: 32px;
+    font-weight: 500;
+}
+
+.LoginPageInnerContainer .LoginFormContainer .subHeader {
+    color: #9aa4ad;
+    margin-top: 5px;
+    margin-bottom: 40px;
+}
+
+.LoginPageInnerContainer .LoginFormContainer .inputContainer {
+    color: #3f3f45;
+    margin: 20px 0px;
+}
+
+.LoginPageInnerContainer .LoginFormContainer .inputContainer .label {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    margin-right: 7px;
+    margin-bottom: 10px;
+}
+
+.LoginPageInnerContainer .LoginFormContainer .inputContainer .label .labelIcon {
+    width: 20px;
+    margin-right: 10px;
+    display: block;
+}
+
+.LoginPageInnerContainer .LoginFormContainer .inputContainer .input {
+    display: block;
+    width: calc(100% - 20px);
+    font-size: 15px;
+    padding: 10px;
+    border: 1px solid #d6d7db;
+    border-radius: 5px;
+    margin-top: 5px;
+    outline: 0px !important;
+}
+
+.LoginPageInnerContainer .LoginFormContainer .OptionsContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.LoginFormContainer {
+    display: flex;
+    align-items: center;
+}
+
+.LoginFormInnerContainer {
+    max-width: 500px;
+}
+
+.LoginPageInnerContainer .LoginFormContainer .checkbox {
+    width: 15px;
+    height: 15px;
+    margin: 0px;
+    display: block;
+    border: 1px solid #d6d7db;
+}
+
+.LoginPageInnerContainer .LoginFormContainer .checkboxContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.LoginPageInnerContainer .LoginFormContainer .checkboxContainer label {
+    display: block;
+    padding: 0px 5px;
+    color: #9aa4ad;
+}
+
+.LoginPageInnerContainer .LoginFormContainer .ForgotPasswordLink {
+    color: #e7483b;
+    text-decoration: none;
+}
+
+.LoginFormContainer .LoginFormInnerContainer .LoginButton {
+    margin-top: 30px;
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    color: white;
+    background-color: #2e1f7a;
+    border: 0px;
+    outline: 0px;
+    cursor: pointer;
+}
+
+.LoginFormContainer .LoginFormInnerContainer .LoginButton:active {
+    background-color: #4520ff;
+}
+
+
+@media only screen and (max-width: 1200px) {
+    .LoginPageInnerContainer .ImageContianer {
+        width: 50%;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .LoginPageInnerContainer .ImageContianer {
+        display: none;
+    }
+
+    .LoginFormContainer {
+        justify-content: center;
+    }
+}
+.LoginPageContainer::-webkit-scrollbar {
+    width: 5px;
+}
+
+.LoginPageContainer::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.LoginPageContainer::-webkit-scrollbar-thumb {
+    background: #2e1f7a;
+}
+
+.LoginPageContainer::-webkit-scrollbar-thumb:hover {
+    background: #4520ff;
+}
+    </style>
+</head>
+
+<body class="hold-transition ">
+    <div class="">
+        <!-- /.login-logo -->
+        <div class="container LoginPageContainer">
+            <div class="LoginPageInnerContainer">
+                
+                <div class="LoginFormContainer">
+                    <div class="LoginFormInnerContainer">
+                        <div class="LogoContainer">
+                            <a href="/" class="navbar-brand">
+                            <img src="{% static 'dist/img/genba.jpg' %}" class="logo"> &nbsp; <b>GS Moze College Of Engineering </b>
+                            </a>
+                        </div>
+                        <header class="header">Log in</header>
+                        <!-- <header class="subHeader">Welcome to <b>animal planet!</b> Please Enter your Details</header> -->
+                        {% if messages %}
+                        <div class="col-12">
+                            {% for message in messages %}
+                            {% if message.tags == 'error' %}
+                            <div class="alert alert-danger text-center ">
+                                {{message }}
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <form action="doLogin/" method="post">
+                            {% csrf_token %}
+                            <div class="inputContainer">
+                                <label class="label" for="emailAddress"><img src="https://i.imgur.com/Hn13wvm.png" class="labelIcon"><span>Email
+                                        Address*</span></label>
+                                <input type="email" class="input" name='email' id="emailAddress" placeholder="Enter your Email Address">
+                               
+                            </div>
+                            <div class="inputContainer">
+                                <label class="label" for="emailAddress"><img src="https://i.imgur.com/g5SvdfG.png"
+                                        class="labelIcon"><span>Password*</span></label>
+                                <input type="password" class="input" name='password' id="emailAddress" placeholder="Enter your Password">
+                            </div>
+                            <div class="OptionsContainer">
+                            <div class="g-recaptcha" data-sitekey="6LfswtgZAAAAAJ7bhwqZZtDpBsc75ekH6FWA4Fnt"></div>
+                        </div>
+                            <div class="OptionsContainer">
+                                <div class="checkboxContainer">
+                                    <input type="checkbox" id="remember" class="checkbox"> <label for="RememberMe">Remember
+                                        me</label>
+                                </div>
+
+                                
+                                <a href="{% url 'password_reset' %}" class="ForgotPasswordLink">Forgot Password?</a>
+                            </div>
+                            <button  type="submit"  class="LoginButton">Login</button>
+                        </form>
+                        <div>
+                            Do not have an Account ? <a href="{% url 'signup' %}" >  Sign Up</a>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="ImageContianer">
+                    <img src="https://i.imgur.com/MYZd7of.png" class="GroupImage">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.login-box -->
+
+    <!-- jQuery -->
+    <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- AdminLTE App -->
+    <script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+
+</body>
+
+</html>
+
+
