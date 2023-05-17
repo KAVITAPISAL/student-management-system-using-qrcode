@@ -28,14 +28,14 @@
   >
     {% if user.is_superuser %}
     <!-- <li><a class="hover:underline" href="/addbook/">Add Book</a></li> -->
-    <li><a class="hover:underline" href="/all-issues/"> Issue Requests</a></li>
+    <li><a class="hover:underline" href="{% url 'all-issues'%}"> Issue Requests</a></li>
     <!-- <li><a class="hover:underline" href="/all-fines/">All Fines</a></li> -->
-    <li><a class="hover:underline" href="/admin/">Admin DashBoard</a></li>
-    <li><a class="hover:underline" href="/student/logout">Logout</a></li>
+    <li><a class="hover:underline" href="{% url 'admin'%}">Admin DashBoard</a></li>
+    <li><a class="hover:underline" href="{% url 'logout' %}">Logout</a></li>
     {% else %}
-    <li><a class="hover:underline" href="/my-issues/">My Issues</a></li>
-    <li><a class="hover:underline" href="/my-fines/">My Fines</a></li>
-    <li><a class="hover:underline" href="/student/logout">Logout</a></li>
+    <li><a class="hover:underline" href="">My Issues</a></li>
+    <li><a class="hover:underline" href="{% url 'my-fines' %}">My Fines</a></li>
+    <li><a class="hover:underline" href="{% url 'logout' %}">Logout</a></li>
     {% endif %}
   </ul>
 </nav>

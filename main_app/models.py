@@ -39,7 +39,7 @@ class Session(models.Model):
 
 
 class CustomUser(AbstractUser):
-    USER_TYPE = ((1, "HOD"), (2, "Staff"), (3, "Student"),(3, "Librarian"))
+    USER_TYPE = ((1, "HOD"), (2, "Staff"), (3, "Student"),(4, "Librarian"))
     GENDER = [("M", "Male"), ("F", "Female")]    
     username = models.CharField(max_length=250,blank=True,null=True )  # Removed username, using email instead
     email = models.EmailField(unique=True)
@@ -74,7 +74,7 @@ class Student(models.Model):
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE,related_name="admin_name")
     course = models.ForeignKey(Course, on_delete=models.DO_NOTHING, null=True, blank=False)
     session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
-    student_id=models.OneToOneField(CustomUser,on_delete=models.CASCADE,related_name="student_id")
+    student_id=models.CharField(max_length=100)
 
     def __str__(self):
         return self.admin.last_name + ", " + self.admin.first_name
@@ -88,7 +88,7 @@ class Staff(models.Model):
         return self.admin.last_name + " " + self.admin.first_name
 
 class Librarian(models.Model):
-    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE,related_name="librarian_name")
 
     def __str__(self):
         return self.admin.last_name + " " + self.admin.first_name

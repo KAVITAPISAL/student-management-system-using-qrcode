@@ -12,7 +12,7 @@ from django.views.generic import UpdateView
 
 from .forms import *
 from .models import *
-
+import traceback
 
 def admin_home(request):
     total_staff = Staff.objects.all().count()
@@ -130,16 +130,19 @@ def add_librarian(request):
             passport_url = fs.url(filename)
             username=first_name +" "+ last_name
             try:
-                user = CustomUser.objects.create_user(username=username,
-                    email=email, password=password, user_type=3, first_name=first_name, last_name=last_name, profile_pic=passport_url)
+                user = CustomUser.objects.create_user(
+                    email=email, password=password, user_type=4, first_name=first_name, last_name=last_name, profile_pic=passport_url)
                 user.gender = gender
+                user.username=username
                 user.address = address
-                user.save(commit=False)
-                user.Librarian.admin = user
+                l=Librarian()
+                l.admin = user
+                l.save()
                 user.save()
                 messages.success(request, "Successfully Added")
                 return redirect(reverse('add_librarian'))
             except Exception as e:
+                print(traceback.format_exc())
                 print(e)
                 messages.error(request, "Could Not Add: " + str(e))
         else:
@@ -204,6 +207,16 @@ def manage_staff(request):
     }
     return render(request, "hod_template/manage_staff.html", context)
 
+def manage_librarian(request):
+    allibrarian = CustomUser.objects.filter(user_type=4)
+    print(allibrarian)
+    context = {
+        'allibrarian': allibrarian,
+        'page_title': 'Manage Librarian'
+    }
+    return render(request, "hod_template/manage_librarian.html", context)
+
+   
 
 def manage_student(request):
     students = CustomUser.objects.filter(user_type=3)
@@ -279,7 +292,56 @@ def edit_staff(request, staff_id):
         user = CustomUser.objects.get(id=staff_id)
         staff = Staff.objects.get(id=user.id)
         return render(request, "hod_template/edit_staff_template.html", context)
-
+    
+def edit_librarian(request,lib_id):
+    
+    lbrn = get_object_or_404(Librarian, id=lib_id)
+    print(lbrn)
+    form = LibrarianForm(request.POST or None, instance=lbrn)
+    context = {
+        'form': form,
+        'lbrn': lbrn,
+        'page_title': 'Edit Librarian'
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            first_name = form.cleaned_data.get('first_name')
+            last_name = form.cleaned_data.get('last_name')
+            address = form.cleaned_data.get('address')
+            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            gender = form.cleaned_data.get('gender')
+            password = form.cleaned_data.get('password') or None
+            passport = request.FILES.get('profile_pic') or None
+            try:
+                user = CustomUser.objects.get(id=lbrn)
+                user.username = username
+                user.email = email
+                if password != None:
+                    user.set_password(password)
+                if passport != None:
+                    fs = FileSystemStorage()
+                    filename = fs.save(passport.name, passport)
+                    passport_url = fs.url(filename)
+                    user.profile_pic = passport_url
+                user.first_name = first_name
+                user.last_name = last_name
+                user.gender = gender
+                user.address = address
+                lbrn.admin=user
+                user.save()
+                lbrn.save()
+                messages.success(request, "Successfully Updated")
+                return redirect(reverse('edit_librarian', args=[id]))
+            except Exception as e:
+                messages.error(request, "Could Not Update " + str(e))
+        else:
+            messages.error(request, "Please fil form properly")
+    else:
+        staff = Librarian.objects.get(id=lib_id)
+       
+        print(staff,user)
+        return render(request, "hod_template/edit_librarian.html", context)
 
 def edit_student(request, student_id):
     student = get_object_or_404(Student, id=student_id)
@@ -300,6 +362,7 @@ def edit_student(request, student_id):
             password = form.cleaned_data.get('password') or None
             course = form.cleaned_data.get('course')
             session = form.cleaned_data.get('session')
+            std_id = form.cleaned_data.get('student_id')
             passport = request.FILES.get('profile_pic') or None
             try:
                 user = CustomUser.objects.get(id=student.admin.id)
@@ -318,6 +381,7 @@ def edit_student(request, student_id):
                 user.gender = gender
                 user.address = address
                 student.course = course
+                student.student_id=std_id
                 user.save()
                 student.save()
                 messages.success(request, "Successfully Updated")
@@ -679,6 +743,13 @@ def delete_staff(request, staff_id):
     staff.delete()
     messages.success(request, "Staff deleted successfully!")
     return redirect(reverse('manage_staff'))
+
+def delete_librarian(request, libr_id):
+    libr = get_object_or_404(CustomUser, id=libr_id)
+    print(libr)
+    # libr.delete()
+    messages.success(request, "Librarian deleted successfully!")
+    return redirect(reverse('manage_librarian'))
 
 
 def delete_student(request, student_id):

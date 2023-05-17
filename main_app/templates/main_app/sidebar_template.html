@@ -55,6 +55,20 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    {% url 'manage_librarian' as manage_librarian %}
+                    {% url 'edit_librarian' student_id as edit_librarian %}
+
+                    <a href="{{manage_librarian}}"
+                        class="nav-link  {% if edit_librarian == request.path or manage_librarian == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Manage Librarian
+
+                        </p>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
                     {% url 'admin_notify_staff' as admin_notify_staff %}
                     <a href="{{admin_notify_staff}}" class="nav-link {% if admin_notify_staff == request.path %} active {% endif %}">
                         <i class="nav-icon fas fa-th"></i>
@@ -360,7 +374,60 @@
                         </p>
                     </a>
                 </li>
-          
+
+{% elif request.user.user_type == '4' %}                
+          <!-- Brand Logo -->
+    <a href="#" class="brand-link">
+        <img src="{% static 'dist/img/AdminLTELogo.png' %} " alt="AdminLTE Logo"
+            class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">Librarian Panel</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{{ request.user.profile_pic}}" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="#" class="d-block">{{ user}}</a>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+                <li class="nav-item">
+                    {% url 'all-issues' as allissues %}
+                    <a href="{{allissues}}" class="nav-link {% if allissues == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Issue Requests
+                        </p>
+                    </a>
+                </li>  
+                 <li class="nav-item">
+                    {% url 'addbook' as addbook %}
+                    <a href="{{addbook}}" class="nav-link {% if addbook == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Add Book
+
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    {% url 'all-fines' as allfines %}
+                    <a href="{{allfines}}" class="nav-link {% if allfines == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            All Fines
+
+                        </p>
+                    </a>
+                </li>
 {% else %}
     <!-- Brand Logo -->
     <a href="" class="brand-link">

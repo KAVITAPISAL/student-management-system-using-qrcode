@@ -61,8 +61,8 @@ def search(request):
 
 
 
-@login_required(login_url='/login_page/')
-@user_passes_test(lambda u: u.is_superuser,login_url='/login_page/')
+@login_required(login_url='login_page')
+# @user_passes_test(lambda u: u.is_superuser,login_url='/login_page/')
 def addbook(request):
     authors=Author.objects.all()
     if request.method=="POST":
@@ -82,8 +82,8 @@ def addbook(request):
 
 
 
-@login_required(login_url='/login_page/')
-@user_passes_test(lambda u: u.is_superuser,login_url='/login_page/')
+@login_required(login_url='login_page')
+# @user_passes_test(lambda u: u.is_superuser,login_url='/login_page/')
 def deletebook(request,bookID):
     book=Book.objects.get(id=bookID)
     messages.success(request,'Book - {} Deleted succesfully '.format(book.name))
@@ -94,8 +94,8 @@ def deletebook(request,bookID):
 
 #  ISSUES
 
-@login_required(login_url='/login_page/')
-@user_passes_test(lambda u: not u.is_superuser,login_url='/student/login/')
+@login_required(login_url='login_page')
+# @user_passes_test(lambda u: not u.is_superuser,login_url='/student/login/')
 def issuerequest(request,bookID):
     student=Student.objects.filter(student_id=request.user)
     if student:
@@ -107,8 +107,8 @@ def issuerequest(request,bookID):
     messages.error(request,'You are Not a Student !')
     return redirect('library/home')
 
-@login_required(login_url='/login_page/')
-@user_passes_test(lambda u: not u.is_superuser ,login_url='/student/login/')
+@login_required(login_url='login_page')
+# @user_passes_test(lambda u: not u.is_superuser ,login_url='/student/login/')
 def myissues(request):
     if Student.objects.filter(student_id=request.user):
         student=Student.objects.filter(student_id=request.user)[0]
@@ -126,8 +126,8 @@ def myissues(request):
     return redirect('library/home')
 
 
-@login_required(login_url='/admin/')
-@user_passes_test(lambda u:  u.is_superuser ,login_url='/admin/')
+@login_required(login_url='login_page')
+# @user_passes_test(lambda u:  u.is_superuser ,login_url='/admin/')
 def requestedissues(request):
     if request.GET.get('studentID') is not None and request.GET.get('studentID') != '':
         try:
@@ -138,10 +138,10 @@ def requestedissues(request):
                 issues=Issue.objects.filter(student=student,issued=False)
                 return render(request,'library/allissues.html',{'issues':issues})
             messages.error(request,'No Student found')
-            return redirect('/all-issues/') 
+            return redirect('all-issues') 
         except User.DoesNotExist:
             messages.error(request,'No Student found')
-            return redirect('/all-issues/')
+            return redirect('all-issues')
 
     else:
         issues=Issue.objects.filter(issued=False)
@@ -149,31 +149,29 @@ def requestedissues(request):
 
 
 
-@login_required(login_url='/admin/')
-@user_passes_test(lambda u:  u.is_superuser ,login_url='/student/login/')
+# @login_required(login_url='/admin/')
+# @user_passes_test(lambda u:  u.is_type ,login_url='/student/login/')
 def issue_book(request,issueID):
     issue=Issue.objects.get(id=issueID)
     issue.return_date=timezone.now() + datetime.timedelta(days=15)
     issue.issued_at=timezone.now()
     issue.issued=True
     issue.save()
-    return redirect('/all-issues/')
+    return redirect('all-issues')
 
 
-@login_required(login_url='/student/login/')
-@user_passes_test(lambda u:  u.is_superuser ,login_url='/admin/')
 def return_book(request,issueID):
     issue=Issue.objects.get(id=issueID)
     calcFine(issue)
     issue.returned=True
     issue.save()
-    return redirect('/all-issues/')
+    return redirect('all-issues')
 
 
 #  FINES
 
-@login_required(login_url='/student/login/')
-@user_passes_test(lambda u: not u.is_superuser ,login_url='/student/login/')
+@login_required(login_url='login_page')
+# @user_passes_test(lambda u: not u.is_superuser ,login_url='/student/login/')
 def myfines(request):
     if Student.objects.filter(student_id=request.user):
         student=Student.objects.filter(student_id=request.user)[0]
@@ -186,26 +184,26 @@ def myfines(request):
     return redirect('library/home')
 
 
-@login_required(login_url='/student/login/')
-@user_passes_test(lambda u:  u.is_superuser ,login_url='/admin/')
+@login_required(login_url='login_page')
+# @user_passes_test(lambda u:  u.is_superuser ,login_url='/admin/')
 def allfines(request):
     issues=Issue.objects.all()
     for issue in issues:
         calcFine(issue)
-    return redirect('/admin/library/fine/')
+    return redirect('library/fine/')
 
 @login_required(login_url='/student/login/')
 @user_passes_test(lambda u:  u.is_superuser ,login_url='/admin/')
 def deletefine(request,fineID):
     fine=Fine.objects.get(id=fineID)
     fine.delete()
-    return redirect('/all-fines/')
+    return redirect('all-fines')
 
 import razorpay
 razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
-@login_required(login_url='/student/login/')
-@user_passes_test(lambda u: not u.is_superuser ,login_url='/student/login/')
+@login_required(login_url='login_page')
+@user_passes_test(lambda u: not u.is_superuser ,login_url='login_page')
 def payfine(request,fineID):
     fine=Fine.objects.get(id=fineID)
     order_amount = int(fine.amount)*100
@@ -226,8 +224,8 @@ def payfine(request,fineID):
     })
 
 
-@login_required(login_url='/student/login/')
-@user_passes_test(lambda u: not u.is_superuser ,login_url='/student/login/')
+@login_required(login_url='login_page')
+@user_passes_test(lambda u: not u.is_superuser ,login_url='login_page')
 def pay_status(request,fineID):
     if request.method == 'POST':
         params_dict={
@@ -249,4 +247,4 @@ def pay_status(request,fineID):
             messages.success(request,'Payment Succesfull')
         except:
             messages.error(request,'Payment Failure')
-    return redirect('/my-fines/')
+    return redirect('my-fines')
