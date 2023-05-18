@@ -56,15 +56,19 @@ def doLogin(request, **kwargs):
         
         #Authenticate
         user = EmailBackend.authenticate(request, username=request.POST.get('email'), password=request.POST.get('password'))
+        print(user)
         if user != None:
             login(request, user)
             if user.user_type == '1':
                 return redirect(reverse("admin_home"))
             elif user.user_type == '2':
                 return redirect(reverse("staff_home"))
-            else:
+            elif user.user_type == '3':
                 return redirect(reverse("student_home"))
+            else:
+                return redirect(reverse("librarian_home"))
         else:
+            print(user)
             messages.error(request, "Invalid details")
             return redirect("/login_page")
 

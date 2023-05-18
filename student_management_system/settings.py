@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-import dj_database_url
+# import dj_database_url
 import os
 from pathlib import Path
 
@@ -170,9 +170,9 @@ EMAIL_USE_TLS = True
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-prod_db = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(prod_db)
+# prod_db = dj_database_url.config(conn_max_age=500)
+# DATABASES['default'].update(prod_db)
 
 
-RAZORPAY_KEY_ID=os.getenv("wertyuiop")
-RAZORPAY_KEY_SECRET=os.getenv("asdfghjk")
+RAZORPAY_KEY_ID="wertyuiop"
+RAZORPAY_KEY_SECRET="asdfghjk"

@@ -95,17 +95,22 @@ def add_student(request):
             passport_url = fs.url(filename)
             username=first_name +" "+ last_name
             try:
-                user = CustomUser.objects.create_user(username=username,
+                user = CustomUser.objects.create_user(
                     email=email, password=password, user_type=3, first_name=first_name, last_name=last_name, profile_pic=passport_url)
+                user.username=username
                 user.gender = gender
                 user.address = address
-                user.student.session = session
-                user.student.course = course
-                user.student.student_id=student_id
+                s=Student()
+                s.admin=user
+                s.session = session
+                s.course = course
+                s.student_id=student_id
+                s.save()
                 user.save()
                 messages.success(request, "Successfully Added")
                 return redirect(reverse('add_student'))
             except Exception as e:
+                print(traceback.format_exc())
                 messages.error(request, "Could Not Add: " + str(e))
         else:
             messages.error(request, "Could Not Add: ")
