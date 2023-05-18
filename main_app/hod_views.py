@@ -256,11 +256,13 @@ def manage_subject(request):
 
 
 def edit_staff(request, staff_id):
-    staff = get_object_or_404(Staff, id=staff_id)
+    staff = get_object_or_404(Staff, admin=(CustomUser.objects.get(id=staff_id).id))
+    print(staff.id,staff)
+    # staff=staff.id
     form = StaffForm(request.POST or None, instance=staff)
     context = {
         'form': form,
-        'staff_id': staff_id,
+        'staff_id': staff.id,
         'page_title': 'Edit Staff'
     }
     if request.method == 'POST':
@@ -274,8 +276,10 @@ def edit_staff(request, staff_id):
             password = form.cleaned_data.get('password') or None
             course = form.cleaned_data.get('course')
             passport = request.FILES.get('profile_pic') or None
+            print(form.cleaned_data)
             try:
-                user = CustomUser.objects.get(id=staff.admin.id)
+                user = CustomUser.objects.get(id=staff_id)
+                print(user)
                 user.username = username
                 user.email = email
                 if password != None:
@@ -295,13 +299,16 @@ def edit_staff(request, staff_id):
                 messages.success(request, "Successfully Updated")
                 return redirect(reverse('edit_staff', args=[staff_id]))
             except Exception as e:
+                print(e)
                 messages.error(request, "Could Not Update " + str(e))
+
         else:
             messages.error(request, "Please fil form properly")
     else:
-        user = CustomUser.objects.get(id=staff_id)
-        staff = Staff.objects.get(id=user.id)
+        # user = CustomUser.objects.get(id=staff.id)
+        # staff = Staff.objects.get(id=user.id)
         return render(request, "hod_template/edit_staff_template.html", context)
+    return HttpResponse()
     
 def edit_librarian(request,lib_id):
     

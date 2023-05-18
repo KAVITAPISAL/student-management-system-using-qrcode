@@ -81,7 +81,7 @@ class StaffForm(CustomUserForm):
     class Meta(CustomUserForm.Meta):
         model = Staff
         fields = CustomUserForm.Meta.fields + \
-            ['course' ]
+            ['course']
 
 class LibrarianForm(CustomUserForm):
     def __init__(self, *args, **kwargs):
