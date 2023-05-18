@@ -311,13 +311,11 @@ def edit_staff(request, staff_id):
     return HttpResponse()
     
 def edit_librarian(request,lib_id):
-    
-    lbrn = get_object_or_404(Librarian, id=lib_id)
-    print(lbrn)
+    lbrn = get_object_or_404(Librarian, admin=(CustomUser.objects.get(id=lib_id).id))
     form = LibrarianForm(request.POST or None, instance=lbrn)
     context = {
         'form': form,
-        'lbrn': lbrn,
+        'lbrn': lbrn.id,
         'page_title': 'Edit Librarian'
     }
     if request.method == 'POST':
@@ -331,7 +329,7 @@ def edit_librarian(request,lib_id):
             password = form.cleaned_data.get('password') or None
             passport = request.FILES.get('profile_pic') or None
             try:
-                user = CustomUser.objects.get(id=lbrn)
+                user = CustomUser.objects.get(id=lib_id)
                 user.username = username
                 user.email = email
                 if password != None:
@@ -349,23 +347,24 @@ def edit_librarian(request,lib_id):
                 user.save()
                 lbrn.save()
                 messages.success(request, "Successfully Updated")
-                return redirect(reverse('edit_librarian', args=[id]))
+                return redirect("manage_librarian")
             except Exception as e:
                 messages.error(request, "Could Not Update " + str(e))
         else:
             messages.error(request, "Please fil form properly")
     else:
-        staff = Librarian.objects.get(id=lib_id)
+        # staff = Librarian.objects.get(id=lib_id)
        
-        print(staff,user)
+        # print(staff,user)
         return render(request, "hod_template/edit_librarian.html", context)
+    return redirect("manage_librarian")
 
 def edit_student(request, student_id):
-    student = get_object_or_404(Student, id=student_id)
+    student = get_object_or_404(Student, admin=(CustomUser.objects.get(id=student_id).id))
     form = StudentForm(request.POST or None, instance=student)
     context = {
         'form': form,
-        'student_id': student_id,
+        'student_id': student.id,
         'page_title': 'Edit Student'
     }
     if request.method == 'POST':
@@ -382,7 +381,7 @@ def edit_student(request, student_id):
             std_id = form.cleaned_data.get('student_id')
             passport = request.FILES.get('profile_pic') or None
             try:
-                user = CustomUser.objects.get(id=student.admin.id)
+                user = CustomUser.objects.get(id=student_id)
                 if passport != None:
                     fs = FileSystemStorage()
                     filename = fs.save(passport.name, passport)

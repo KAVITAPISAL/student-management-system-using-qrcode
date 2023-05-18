@@ -92,7 +92,7 @@ class Librarian(models.Model):
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE,related_name="librarian_name")
 
     def __str__(self):
-        return self.admin.last_name + " " + self.admin.first_name
+        return self.admin.email
 
 
 class Subject(models.Model):
@@ -188,6 +188,8 @@ def create_user_profile(sender, instance, created, **kwargs):
             Staff.objects.create(admin=instance)
         if instance.user_type == 3:
             Student.objects.create(admin=instance)
+        if instance.user_type == 4:
+            Librarian.objects.create(admin=instance)    
 
 
 
@@ -200,6 +202,8 @@ def save_user_profile(sender, instance, **kwargs):
         Staff.objects.get_or_create(admin=instance)
     if instance.user_type == 3:
         Student.objects.get_or_create(admin=instance)
+    if instance.user_type == 4:
+        Librarian.objects.get_or_create(admin=instance)
 
 
 
