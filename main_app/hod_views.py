@@ -57,12 +57,16 @@ def add_staff(request):
             fs = FileSystemStorage()
             filename = fs.save(passport.name, passport)
             passport_url = fs.url(filename)
+            username=first_name +" "+ last_name
             try:
                 user = CustomUser.objects.create_user(
                     email=email, password=password, user_type=2, first_name=first_name, last_name=last_name, profile_pic=passport_url)
+                user.username=username
                 user.gender = gender
                 user.address = address
-                user.staff.course = course
+                s=Staff.objects.get(admin=user)
+                s.course = course
+                s.save()
                 user.save()
                 messages.success(request, "Successfully Added")
                 return redirect(reverse('add_staff'))
@@ -96,6 +100,7 @@ def add_student(request):
             username=first_name +" "+ last_name
             try:
                 user = CustomUser.objects.create_user(
+                    
                     email=email, password=password, user_type=3, first_name=first_name, last_name=last_name, profile_pic=passport_url)
                 user.username=username
                 user.gender = gender
@@ -140,7 +145,7 @@ def add_librarian(request):
                 user.gender = gender
                 user.username=username
                 user.address = address
-                l=Librarian()
+                l=Librarian.objects.get(admin=user)
                 l.admin = user
                 l.save()
                 user.save()
