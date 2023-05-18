@@ -211,7 +211,8 @@ def add_subject(request):
 
 def manage_staff(request):
     allStaff = CustomUser.objects.filter(user_type=2)
-    context = {
+    print(allStaff)
+    context = { 
         'allStaff': allStaff,
         'page_title': 'Manage Staff'
     }
