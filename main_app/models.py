@@ -78,7 +78,7 @@ class Student(models.Model):
     student_id=models.CharField(max_length=120,null=True, blank=False)
 
     def __str__(self):
-        return self.admin.last_name + ", " + self.admin.first_name
+        return self.admin.email
 
 
 class Staff(models.Model):

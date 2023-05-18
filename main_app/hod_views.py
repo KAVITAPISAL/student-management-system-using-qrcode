@@ -230,6 +230,7 @@ def manage_librarian(request):
 
 def manage_student(request):
     students = CustomUser.objects.filter(user_type=3)
+    print(students)
     context = {
         'students': students,
         'page_title': 'Manage Students'
@@ -361,6 +362,7 @@ def edit_librarian(request,lib_id):
 
 def edit_student(request, student_id):
     student = get_object_or_404(Student, admin=(CustomUser.objects.get(id=student_id).id))
+    print(student)
     form = StudentForm(request.POST or None, instance=student)
     context = {
         'form': form,
@@ -755,13 +757,16 @@ def send_staff_notification(request):
 
 
 def delete_staff(request, staff_id):
-    staff = get_object_or_404(CustomUser, staff__id=staff_id)
+    # staff = get_object_or_404(CustomUser, id=staff_id)
+    staff=CustomUser.objects.get(id=staff_id)
     staff.delete()
     messages.success(request, "Staff deleted successfully!")
     return redirect(reverse('manage_staff'))
 
 def delete_librarian(request, libr_id):
-    libr = get_object_or_404(CustomUser, id=libr_id)
+    libr = CustomUser.objects.get(id=libr_id)
+
+
     print(libr)
     # libr.delete()
     messages.success(request, "Librarian deleted successfully!")
@@ -769,7 +774,9 @@ def delete_librarian(request, libr_id):
 
 
 def delete_student(request, student_id):
-    student = get_object_or_404(CustomUser, student__id=student_id)
+    
+    student=CustomUser.objects.get(id=student_id)
+    # student = get_object_or_404(CustomUser, id=student_id)
     student.delete()
     messages.success(request, "Student deleted successfully!")
     return redirect(reverse('manage_student'))
