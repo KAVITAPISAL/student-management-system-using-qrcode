@@ -194,11 +194,11 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     print(sender,instance)
     if instance.user_type == 1:
-        instance.admin.save()
+        Admin.objects.get_or_create(admin=instance)
     if instance.user_type == 2:
-        instance.staff.save()
+        Staff.objects.get_or_create(admin=instance)
     if instance.user_type == 3:
-        instance.student.save()
+        Student.objects.get_or_create(admin=instance)
 
 
 
