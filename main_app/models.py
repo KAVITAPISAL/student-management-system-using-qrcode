@@ -55,7 +55,7 @@ class CustomUser(AbstractUser):
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.email
+        return self.last_name + ", " + self.first_name
 
 
 class Admin(models.Model):
@@ -198,8 +198,7 @@ def save_user_profile(sender, instance, **kwargs):
     if instance.user_type == 2:
         instance.staff.save()
     if instance.user_type == 3:
-        s=Student(admin=(CustomUser.objects.get(email=instance).id))
-        s.save()
+        instance.student.save()
 
 
 
