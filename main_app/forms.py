@@ -62,7 +62,7 @@ class StudentForm(CustomUserForm):
     class Meta(CustomUserForm.Meta):
         model = Student
         fields = CustomUserForm.Meta.fields + \
-            ['course', 'session']
+            ['course', 'session','student_id']
 
 
 class AdminForm(CustomUserForm):

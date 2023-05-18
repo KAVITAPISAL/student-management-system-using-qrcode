@@ -100,10 +100,12 @@ def add_student(request):
                 user.username=username
                 user.gender = gender
                 user.address = address
-                Student.objects.create_user(
-                session = session,
-                course = course,
-                student_id=student_id).save()
+                s=Student.objects.get(admin=user)
+                s.admin=user
+                s.session = session
+                s.course = course
+                s.student_id=student_id
+                s.save()
                 user.save()
                 messages.success(request, "Successfully Added")
                 return redirect(reverse('add_student'))
