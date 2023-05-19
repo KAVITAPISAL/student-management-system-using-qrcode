@@ -210,7 +210,7 @@ def student_view_result(request):
 
 def add_student_docs(request):
     if request.method == 'POST':
-        form = StudentForm(request.POST, request.FILES)
+        form = StudentDocumentForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             messages.success("Documents added SuccessFully")

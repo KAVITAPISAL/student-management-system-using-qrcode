@@ -30,7 +30,7 @@
                                     <td>{{doc.document_name}}</td>
                                     <td><embed src="{{ doc.document_pdf }}" type="application/pdf" width="100%" height="600px"></td>
                                     <td><a type="button" class="btn btn-primary" href="{% url 'edit_docs' doc.id %}">edit</a>
-                                        <td><a type="button" class="btn btn-warning" href="{% url 'delete_docs' doc.id %}">edit</a>
+                                        <td><a type="button" class="btn btn-warning" href="{% url 'delete_docs' doc.id %}">delete</a>
                                     </td>
                                 </tr>
                                 {% endfor %}
