@@ -23,7 +23,8 @@ import datetime
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib import auth
-from student_management_system import settings
+
+from django.conf import settings
 
 
 # student information

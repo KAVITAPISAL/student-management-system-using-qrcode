@@ -13,7 +13,10 @@ from django.views.decorators.csrf import csrf_exempt
 from .forms import *
 from .models import *
 
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 
+import traceback
 def student_home(request):
     student = get_object_or_404(Student, admin=request.user)
     total_subject = Subject.objects.filter(course=student.course).count()
@@ -212,15 +215,39 @@ def add_student_docs(request):
     if request.method == 'POST':
         form = StudentDocumentForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            messages.success(request,"Documents added SuccessFully")
-            return redirect("manage_docs")
+            name = form.cleaned_data.get('document_name')
+            pdf = request.FILES.get('document_pdf')
+            try:
+    
+                student = Student.objects.get(admin__email=request.user.email)
+                std = StudentDocuments.objects.filter(student=student,document_name=name)
+                if std.exists():
+                    messages.warning(request,"Document already exist !")
+                    return redirect("add_student_docs")
+                else:
+                    fs = FileSystemStorage()
+                    filename = fs.save(f'documents/{pdf.name}', ContentFile(pdf.read()))
+                    doc = fs.url(filename)
+                    std=StudentDocuments()       
+                    std.document_pdf=doc
+                    std.student=student
+                    std.document_name=name  
+                    std.save()
+                    messages.success(request,"Documents added SuccessFully")
+                    return redirect("manage_docs")
+            except Exception:
+                print(traceback.format_exc())
+                messages.warning(request,"Please Try again")
+                return redirect(reverse("add_student_docs"))
     else:
         form = StudentDocumentForm()
     return render(request, 'student_template/documents/student_add_docs.html', {'form': form})
 
 def manage_docs(request):
-    docs=StudentDocuments.objects.all()
+    user=Student.objects.get(admin=CustomUser.objects.get(email=request.user))
+    docs=StudentDocuments.objects.filter(student=user)
+    for i in docs:
+        print(i.id)
     context={
         'page_title': "Manage Documents",
         'docs':docs
@@ -229,10 +256,11 @@ def manage_docs(request):
 
 
 def edit_docs(request,docid):
-    std = get_object_or_404(StudentDocuments, student=(Student.objects.get(id=docid).id))
+    user=Student.objects.get(admin=CustomUser.objects.get(email=request.user))
+    std = get_object_or_404(StudentDocuments, id=docid)
     print(std)
     # staff=staff.id
-    form = StudentDocumentForm(request.POST or None, instance=std)
+    form = StudentDocumentForm(request.POST or None, request.FILES, instance=std)
     context = {
         'form': form,
         'staff_id': std.id,
@@ -241,11 +269,15 @@ def edit_docs(request,docid):
     if request.method == 'POST':
         if form.is_valid():
             name = form.cleaned_data.get('name')
-            docs = request.FILES.get('docs') or None
+            docs = request.FILES.get('document_pdf') or None
             print(form.cleaned_data)
             try:
                 user = StudentDocuments.objects.get(id=std)
-                
+                fs = FileSystemStorage()
+                filename = fs.save(f'documents/{docs.name}', ContentFile(docs.read()))
+                doc = fs.url(filename)
+                user.document_name=name              
+                user.document_pdf=doc
                 messages.success(request, "Successfully Updated")
                 return redirect(reverse('edit_docs', args=[std]))
             except Exception as e:

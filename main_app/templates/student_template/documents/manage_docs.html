@@ -29,7 +29,6 @@
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{doc.document_name}}</td>
                                     <td><a href="{{ doc.document_pdf }}" target="_blank">view Document</a>
-                                    <td><a type="button" class="btn btn-primary" href="{% url 'edit_docs' doc.id %}">edit</a>
                                         <td><a type="button" class="btn btn-warning" href="{% url 'delete_docs' doc.id %}">delete</a>
                                     </td>
                                 </tr>

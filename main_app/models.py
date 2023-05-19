@@ -210,7 +210,7 @@ def save_user_profile(sender, instance, **kwargs):
 class StudentDocuments(models.Model):
     choice=(
         ("birth certficate","birth certficate"),
-        ("SSC certficate","HSC certficate"),
+        ("SSC certficate","SSC certficate"),
         ("HSC certficate","HSC certficate"),
         ("cast certficate","cast certficate"),
         ("income certficate","income certficate"),
@@ -218,13 +218,13 @@ class StudentDocuments(models.Model):
     )
     student=models.ForeignKey(Student, on_delete=models.CASCADE)
     document_name=models.CharField(choices=choice,max_length=50)
-    document_pdf=models.FileField(upload_to='documents/%Y/%m/%d')
+    document_pdf=models.FileField(upload_to='student_documents/')
     
     # verified=models.BooleanField(default=False)
     # response=models.CharField(max_length=100,null=True,blank=True)
 
     def __str__(self):
-            return self.student.student
+        return self.student.student_id
 
     
 class Fine(models.Model):

@@ -21,16 +21,18 @@
                                     <th>Student name</th>
                                     <th>Document Name</th>
                                     <th>Document</th>
-                                    <th>Action</th>
+                                    <!-- <th>Action</th> -->
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for doc in docs %}
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
-                                    <td>{{ doc.name }}</td>
+                                    <td>{{doc.student }}</td>
                                     <td>{{doc.document_name}}</td>
-                                    <td><embed src="{{ doc.document_pdf }}" type="application/pdf" width="100%" height="600px"></td>
+                                    <td>
+                                        <a href="{{doc.document_pdf}}" target="_blank">view document</a>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

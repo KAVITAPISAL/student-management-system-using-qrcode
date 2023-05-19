@@ -230,7 +230,7 @@ def manage_librarian(request):
    
 
 def manage_student(request):
-    students = CustomUser.objects.filter(user_type=3)
+    students = Student.objects.all()
     print(students)
     context = {
         'students': students,

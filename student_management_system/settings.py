@@ -16,7 +16,7 @@ from pathlib import Path
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Quick-start development settings - unsuitable for production
@@ -77,6 +77,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                
+                'django.template.context_processors.media',     
             ],
         },
     },
@@ -91,7 +93,7 @@ WSGI_APPLICATION = 'student_management_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
     # 'default': {
     #     'ENGINE': 'django.db.backends.mysql',
@@ -144,10 +146,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 AUTH_USER_MODEL = 'main_app.CustomUser'
 AUTHENTICATION_BACKENDS = ['main_app.EmailBackend.EmailBackend']
 TIME_ZONE = 'Asia/Kolkata'

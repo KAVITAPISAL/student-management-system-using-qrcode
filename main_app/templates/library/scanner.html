@@ -1,7 +1,8 @@
-{% extends 'main_app/base.html' %} {% block heading %}  {% endblock heading %}
+{% block heading %}  {% endblock heading %}
 {% load static %}
-{% block content %}
 {% load qr_code %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 <style>
     #uni_modal .modal-footer {
         display: none
@@ -57,33 +58,8 @@
         alert(content);
         $('.modal').modal('hide')
         setTimeout(() => {
-            // uni_modal("View Student Details", "{% url 'scanned-code' %}/" + content, 'modal-md')
-            $.ajax({
-                url: "{% url 'scanned-code' %}/" + content,
-                error: err => {
-                    console.log()
-                    alert("An error occured")
-                },
-                success: function(resp) {
-                    if (resp) {
-                        $('#uni_modal .modal-title').html("View Student Details")
-                        $('#uni_modal .modal-body').html(resp)
-                        if ($size != '') {
-                            $('#uni_modal .modal-dialog').addClass('modal-md modal-dialog-centered')
-                        } else {
-                            $('#uni_modal .modal-dialog').removeAttr("class").addClass("modal-dialog modal-md modal-dialog-centered")
-                        }
-                        $('#uni_modal').modal({
-                            backdrop: 'static',
-                            keyboard: false,
-                            focus: true
-                        })
-                        $('#uni_modal').modal('show')
-                        
-                    }
-                }
-            })
-            scanner.stop()
+            uni_modal("View Student Details", "{% url 'scanned-code' %}/" + content, 'modal-md')
+       scanner.stop()
         }, 500)
     });
     $('#uni_modal').on('shown.bs.modal', function() {
@@ -104,4 +80,3 @@
         scanner.stop()
     })
  </script>
-{% endblock content %}

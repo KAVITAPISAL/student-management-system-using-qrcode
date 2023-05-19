@@ -44,14 +44,7 @@ def student_list(request):
 
     return render(request, 'student_list.html', context)
 
-@login_required
-def student_data(request,id):
-    context =context_data()
-    context['page'] = 'student Documents'
-    context['page_title'] = 'student Documents'
-    context['docs'] = StudentDocuments.objects.filter(id=Student.objects.get(id=id))
 
-    return render(request, 'library/student_data.html', context)
 
 
 @login_required 
@@ -110,10 +103,18 @@ def view_details(request, code = None):
     if code is None:
         return HttpResponse("Student code is Invalid")
     else:
+        print(code)
         context = context_data()
         context['student'] = Student.objects.get(student_id=code)
+        print(Student.objects.get(student_id=code).id)
         return render(request, 'library/view_details.html', context)
-
+@login_required
+def student_data(request,id):
+    context =context_data()
+    context['page'] = 'student Documents'
+    context['page_title'] = 'student Documents'
+    context['docs'] = StudentDocuments.objects.filter(student=id)
+    return render(request, 'library/student_data.html', context)
 @login_required
 def delete_student(request, pk=None):
     resp = { 'status' : 'failed', 'msg' : '' }

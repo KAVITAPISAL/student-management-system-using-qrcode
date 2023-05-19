@@ -13,10 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
-
+from django.urls import path,include
+from django.conf import settings
 from main_app.EditResultView import EditResultView
 
+from django.conf.urls.static import static
 from . import hod_views, staff_views, student_views, views,account_views
 
 urlpatterns = [
@@ -153,8 +154,8 @@ urlpatterns = [
     path('view-scanner',account_views.view_scanner,name='view-scanner'),
     path('student_data/<int:id>',account_views.student_data,name='student_data'),
     
+    path('qr_code/', include('qr_code.urls', namespace="qr_code")),
 #     path('payfines<int:fineID>',librarian_views.payfine,name="payfines"),
 #     path('paystatus<int:fineID>',librarian_views.pay_status,name="search"),
 #     path('all-fines',librarian_views.all_fines,name="all-fines"),
-
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -30,21 +30,21 @@
                                 {% for student in students %}
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
-                                    <td>{{student.last_name}}, {{student.first_name}}</td>
-                                    <td>{{student.email}}</td>
-                                    {% if student.gender == 'F' %}
+                                    <td>{{student.admin.last_name}}, {{student.admin.first_name}}</td>
+                                    <td>{{student.admin}}</td>
+                                    {% if student.admin.gender == 'F' %}
                                     <td>Female</td>
                                     {% else %}
                                     <td>Male</td>
                                     {% endif %}
                                     
-                                    <td>{{student.student.course.name}}</td>
+                                    <td>{{student.course}}</td>
                                     <td>
-                                        {% if student.profile_pic == ""  %}
+                                        {% if student.admin.profile_pic == ""  %}
                                         No Image
                                         {% else %}
                                         <img class="img img-fluid mb-2" height="100" width="100"
-                                            src="{{student.profile_pic}}" alt="">
+                                            src="{{student.admin.profile_pic}}" alt="">
                                         {% endif %}
                                     </td>
                                     

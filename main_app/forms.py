@@ -205,7 +205,27 @@ class EditResultForm(FormSettings):
 
 
 class StudentDocumentForm(forms.ModelForm):
+    document_pdf = forms.FileField()
+    def __init__(self, *args, **kwargs):
+        super(StudentDocumentForm, self).__init__(*args, **kwargs)
+
+     
+
+    def clean_document_pdf(self):
+        document_pdf = self.cleaned_data.get('document_pdf')
+        
+        if document_pdf:
+            # Perform your validation logic here
+            # For example, check the file size or file extension
+            if document_pdf.size > 500 * 1024 * 1024:  # 10 MB
+                raise forms.ValidationError("File size should be less than 50 MB.")
+            
+            valid_extensions = ['.pdf']
+            if not any(document_pdf.name.lower().endswith(ext) for ext in valid_extensions):
+                raise forms.ValidationError("Only PDF files are allowed.")
+
+        return document_pdf  
     class Meta:
         model = StudentDocuments
-        fields = "__all__"       
+        fields = ["document_name","document_pdf"]       
        

@@ -401,7 +401,8 @@
             
                 <li class="nav-item">
                     {% url 'view-scanner' as viewscanner %}
-                    <a href="{% url 'view-scanner' %}" id="scanner-link"  class="nav-link {% if viewscanner == request.path %} active {% endif %}">
+                    <a class="nav-link {% if viewscanner == request.path %} active {% endif %}" id="scanner-link" aria-current="page" href="javascript:void(0)" data_url="{% url 'view-scanner' %}">
+    
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Search Student
@@ -541,3 +542,11 @@
 </div>
 <!-- /.sidebar -->
 </aside>
+
+<script>
+        $(function() {
+        $('#scanner-link').click(function(){
+            uni_modal("QR Scanner", $(this).attr('data_url'))
+        })
+    })
+</script>
