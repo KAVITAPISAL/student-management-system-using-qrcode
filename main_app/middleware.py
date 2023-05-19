@@ -19,7 +19,7 @@ class LoginCheckMiddleWare(MiddlewareMixin):
                     return redirect(reverse('student_home'))
             elif user.user_type == '4': # ... or Student ?
                 if modulename == 'main_app.librarian':
-                    return redirect(reverse('library'))    
+                    return redirect(reverse('librarian_home'))    
             # else: # None of the aforementioned ? Please take the user to login page
                 
         else:

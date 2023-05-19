@@ -56,6 +56,7 @@ class CustomUserForm(FormSettings):
 
 
 class StudentForm(CustomUserForm):
+    student_id = forms.CharField(max_length=250, label="Student ID")
     def __init__(self, *args, **kwargs):
         super(StudentForm, self).__init__(*args, **kwargs)
 
@@ -64,7 +65,12 @@ class StudentForm(CustomUserForm):
         fields = CustomUserForm.Meta.fields + \
             ['course', 'session','student_id']
 
-
+    def clean_student_id(self):
+        student_id = self.cleaned_data['student_id']
+        
+        if Student.objects.filter(student_id=student_id).exists():
+            raise forms.ValidationError(f"{student_id} already exists.")
+        return student_id
 class AdminForm(CustomUserForm):
     def __init__(self, *args, **kwargs):
         super(AdminForm, self).__init__(*args, **kwargs)
@@ -196,3 +202,10 @@ class EditResultForm(FormSettings):
     class Meta:
         model = StudentResult
         fields = ['session_year', 'subject', 'student', 'test', 'exam']
+
+
+class StudentDocumentForm(forms.ModelForm):
+    class Meta:
+        model = StudentDocuments
+        fields = "__all__"       
+       

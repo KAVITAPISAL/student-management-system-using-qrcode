@@ -205,3 +205,66 @@ def student_view_result(request):
         'page_title': "View Results"
     }
     return render(request, "student_template/student_view_result.html", context)
+
+
+
+def add_student_docs(request):
+    if request.method == 'POST':
+        form = StudentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success("Documents added SuccessFully")
+            return redirect("manage_docs")
+    else:
+        form = StudentForm()
+    return render(request, 'add_student.html', {'form': form})
+
+def manage_docs(request):
+    docs=StudentDocuments.objects.all()
+    context={
+        'page_title': "Manage Documents",
+        'docs':docs
+    }
+    return render(request, 'library/manage_docs.html', context)
+
+
+def edit_docs(request,docid):
+    std = get_object_or_404(StudentDocuments, student=(Student.objects.get(id=docid).id))
+    print(std)
+    # staff=staff.id
+    form = StudentDocumentForm(request.POST or None, instance=std)
+    context = {
+        'form': form,
+        'staff_id': std.id,
+        'page_title': 'Edit Staff'
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            name = form.cleaned_data.get('name')
+            docs = request.FILES.get('docs') or None
+            print(form.cleaned_data)
+            try:
+                user = StudentDocuments.objects.get(id=std)
+                
+                messages.success(request, "Successfully Updated")
+                return redirect(reverse('edit_docs', args=[std]))
+            except Exception as e:
+                print(e)
+                messages.error(request, "Could Not Update " + str(e))
+
+        else:
+            messages.error(request, "Please fil form properly")
+    else:
+        # user = CustomUser.objects.get(id=staff.id)
+        # staff = Staff.objects.get(id=user.id)
+        return render(request, "student_template/documents/edit_docs.html", context)
+    return HttpResponse()
+
+
+def delete_docs(request,docid):
+    doc = get_object_or_404(StudentDocuments, id=docid)
+    doc.delete()
+    messages.success(request, "Documents deleted successfully!")
+    return redirect(reverse('manage_docs'))
+
+

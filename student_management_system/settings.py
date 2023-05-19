@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'qr_code',
     # My Apps
     'main_app.apps.MainAppConfig'
 ]

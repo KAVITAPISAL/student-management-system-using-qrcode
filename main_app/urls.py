@@ -17,7 +17,7 @@ from django.urls import path
 
 from main_app.EditResultView import EditResultView
 
-from . import hod_views, staff_views, student_views, views,librarian_views
+from . import hod_views, staff_views, student_views, views,account_views
 
 urlpatterns = [
     path("", views.home, name='home'),
@@ -139,20 +139,22 @@ urlpatterns = [
 
      #librarian
 
-    path("library/home",librarian_views.librarian_home,name='librarian_home'),  
-    path('search',librarian_views.search,name="search"),
-    path('sort',librarian_views.sort,name="sort"),
-    path('addbook',librarian_views.addbook,name="addbook"),
-    path('deletebook/<int:bookID>',librarian_views.deletebook,name="deletebook"),
-    path('request-book-issue/<int:bookID>',librarian_views.issuerequest,name="request-book-issue"),
-    path('my-issues',librarian_views.myissues,name="my-issues"),
-    path('my-fines',librarian_views.myfines,name="my-fines"),
-    path('payfines<int:fineID>',librarian_views.payfine,name="payfines"),
-    path('paystatus<int:fineID>',librarian_views.pay_status,name="search"),
-    path('all-issues',librarian_views.requestedissues,name="all-issues"),
-    path('all-fines',librarian_views.allfines,name="all-fines"),
-    path('issuebook/<int:issueID>',librarian_views.issue_book,name="issuebook"),
-    path('returnbook/<int:issueID>',librarian_views.return_book,name="returnbook"),
-    path('delete-fine/<int:fineID>',librarian_views.deletefine,name="delete-fine"),
+    path("library/home",account_views.manage_student,name='librarian_home'),  
+    path("add_student_docs",student_views.add_student_docs,name='add_student_docs'),  
+    path("manage_docs",student_views.manage_docs,name='manage_docs'), 
+    path("edit_docs/<int:docid>",student_views.edit_docs,name="edit_docs") ,
+    path("delete_docs/<int:docid>",student_views.delete_docs,name="delete_docs") ,
+    
+    
+
+    path('view_card/<int:pk>',account_views.view_card,name='view-card'),
+    path('view_details/<str:code>',account_views.view_details,name='view-details'),
+    path('view_details',account_views.view_details,name='scanned-code'),
+    path('view-scanner',account_views.view_scanner,name='view-scanner'),
+    path('student_data/<int:id>',account_views.student_data,name='student_data'),
+    
+#     path('payfines<int:fineID>',librarian_views.payfine,name="payfines"),
+#     path('paystatus<int:fineID>',librarian_views.pay_status,name="search"),
+#     path('all-fines',librarian_views.all_fines,name="all-fines"),
 
 ]

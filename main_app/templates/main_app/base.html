@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html>
 
@@ -13,7 +14,7 @@
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Tempusdominus Bbootstrap 4 -->
-    <link rel="stylesheet"
+  <link rel="stylesheet"
         href="{% static 'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css'%} ">
     <!-- iCheck -->
     <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css'%} ">
@@ -29,6 +30,38 @@
     <link rel="stylesheet" href="{% static 'plugins/summernote/summernote-bs4.css'%} ">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+         .modal-sub-footer {
+            display: flex;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0.75rem;
+            border-top: 1px solid #dee2e6;
+            border-bottom-right-radius: calc(0.3rem - 1px);
+            border-bottom-left-radius: calc(0.3rem - 1px);
+        }
+        #pre-loader {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    backdrop-filter: brightness(.5);
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+}
+
+
+    </style>
     {% block custom_css %}
 
     {% endblock custom_css %}
@@ -163,10 +196,45 @@
         </nav>
   
         {% endif %}
+        
+     
+       
 
-     {% include "main_app/footer.html" %}
-
-
+        {% include "main_app/footer.html" %}
+    </div>
+    <div class="modal fade" id="uni_modal" role='dialog'>
+        <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn  btn-sm btn-flat btn-primary rounded-0" id='submit' onclick="$('#uni_modal form').submit()">Save</button>
+                    <button type="button" class="btn btn-sm btn-flat btn-light border rounded-0" data-bs-dismiss="modal">Cancel</button>
+                </div>
+                <div class="modal-sub-footer">
+                    <button type="button" class="btn btn-sm btn-flat btn-light border rounded-0" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="confirm_modal" role='dialog'>
+        <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmation</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="delete_content"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-flat btn-primary rounded-0" id='confirm' onclick="">Continue</button>
+                    <button type="button" class="btn btn-sm btn-flat btn-light border rounded-0" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- ./wrapper -->
     <!-- jQuery -->
@@ -176,6 +244,97 @@
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
         $.widget.bridge('uibutton', $.ui.button)
+        const loader = $('<div>')
+        loader.attr('id', 'pre-loader')
+        loader.html('<div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>')
+
+        window.start_loader = function() {
+            $('body').removeClass('loading')
+            if ($('#pre-loader').length > 0)
+                $('#pre-loader').remove();
+            $('body').append(loader)
+            $('body').addClass('loading')
+        }
+        window.end_loader = function() {
+            if ($('#pre-loader').length > 0)
+                $('#pre-loader').remove();
+            $('body').removeClass('loading')
+        }
+        window.uni_modal = function($title = '', $url = '', $size = "") {
+            start_loader()
+            $.ajax({
+                url: $url,
+                error: err => {
+                    console.log()
+                    alert("An error occured")
+                },
+                success: function(resp) {
+                    console.log(resp)
+                    if (resp) {
+                        $('#uni_modal .modal-title').html($title)
+                        $('#uni_modal .modal-body').html(resp)
+                        if ($size != '') {
+                            $('#uni_modal .modal-dialog').addClass($size + ' modal-dialog-centered')
+                        } else {
+                            $('#uni_modal .modal-dialog').removeAttr("class").addClass("modal-dialog modal-md modal-dialog-centered")
+                        }
+                        $('#uni_modal').modal({
+                            backdrop: 'static',
+                            keyboard: false,
+                            focus: true
+                        })
+                        $('#uni_modal').modal('show')
+                        end_loader()
+                    }
+                }
+            })
+        }
+        window._conf = function($msg = '', $func = '', $params = []) {
+            $('#confirm_modal #confirm').attr('onclick', $func + "(" + $params.join(',') + ")")
+            $('#confirm_modal .modal-body').html($msg)
+            $('#confirm_modal').modal('show')
+        }
+        
+        // $(function() {
+        //     $('#uni_modal').on('shown.bs.modal', function() {
+        //         if ($('#e-details').length > 0) {
+        //             var delete_btn = $('<button id="delete-btn" class="btn btn-danger btn-sm bg-gradient rounded-0 me-2"><i class="fa fa-trash"></i> Delete</button>')
+        //             var edit_btn = $('<a id="edit-btn" href="' + emp_edit_url + '" class="btn btn-primary btn-sm bg-gradient rounded-0 me-2"><i class="fa fa-edit"></i> Edit</a>')
+        //             $(this).find('.modal-sub-footer').prepend(delete_btn)
+        //             $(this).find('.modal-sub-footer').prepend(edit_btn)
+        //             delete_btn.click(function() {
+        //                 _conf("Are you sure to delete this student?", "delete_student")
+        //             })
+    
+        //             $('#uni_modal').on('hide.bs.modal', function() {
+        //                 delete_btn.remove()
+        //                 edit_btn.remove()
+        //             })
+    
+        //         }
+        //     })
+        // })
+    
+        // function delete_student() {
+        //     start_loader()
+        //     $.ajax({
+        //         url: emp_delete_url,
+        //         error: err => {
+        //             console.error(err)
+        //             alert("An error occurred.")
+        //             end_loader()
+        //         },
+        //         success: function(resp) {
+        //             if (resp.status == 'success') {
+        //                 location.reload()
+        //             } else if (!!resp.msg) {
+        //                 alert(resp.msg)
+        //             }
+        //             end_loader()
+        //         }
+        //     })
+        // }
+
     </script>
     <!-- Bootstrap 4 -->
     <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js'%} "></script>

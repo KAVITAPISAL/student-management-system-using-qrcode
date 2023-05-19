@@ -380,7 +380,7 @@
     <a href="#" class="brand-link">
         <img src="{% static 'dist/img/AdminLTELogo.png' %} " alt="AdminLTE Logo"
             class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">Librarian Panel</span>
+        <span class="brand-text font-weight-light">Accountant Panel</span>
     </a>
 
     <!-- Sidebar -->
@@ -398,33 +398,21 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
+            
                 <li class="nav-item">
-                    {% url 'all-issues' as allissues %}
-                    <a href="{{allissues}}" class="nav-link {% if allissues == request.path %} active {% endif %}">
+                    {% url 'view-scanner' as viewscanner %}
+                    <a href="{% url 'view-scanner' %}" id="scanner-link"  class="nav-link {% if viewscanner == request.path %} active {% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
-                            Issue Requests
-                        </p>
-                    </a>
-                </li>  
-                 <li class="nav-item">
-                    {% url 'addbook' as addbook %}
-                    <a href="{{addbook}}" class="nav-link {% if addbook == request.path %} active {% endif %}">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>
-                            Add Book
-
+                            Search Student
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    {% url 'all-fines' as allfines %}
-                    <a href="{{allfines}}" class="nav-link {% if allfines == request.path %} active {% endif %}">
+                    <a href="{% url 'librarian_home' %}" id="scanner-link"  class="nav-link {% if librarian_home == request.path %} active {% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
-                            All Fines
-
+                            Manage Student
                         </p>
                     </a>
                 </li>

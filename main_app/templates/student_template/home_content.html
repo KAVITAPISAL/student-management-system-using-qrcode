@@ -120,9 +120,9 @@
 $(document).ready(function(){
 
     //Dataset
-    var subjects = {{data_name|safe}}
-    var data_present = {{data_present}}
-    var data_absent = {{data_absent}}
+    var subjects = "{{data_name|safe}}"
+    var data_present = "{{data_present}}"
+    var data_absent = "{{data_absent}}"
 
     //-------------
     //- DONUT CHART -
@@ -133,7 +133,7 @@ $(document).ready(function(){
       ],
       datasets: [
         {
-          data: [{{percent_present}}, {{percent_absent}}],
+          data: ["{{percent_present}}", "{{percent_absent}}"],
           backgroundColor : ['#00a65a','#f56954'],
         }
       ]
