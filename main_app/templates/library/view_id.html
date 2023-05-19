@@ -27,7 +27,7 @@
             <div class="id-card">
                 <div class="head-text text-center fw-bolder">{{system_name}}</div>
                 <div class="d-flex w-100 justify-content-center my-4">
-                    <img src="{% if student.profile_pic %}{{student.profile_pic.url}}{% endif %}" id="card-avatar" class="img-thumbnail" alt="">
+                    <img src="{% if student.admin.profile_pic %}{{student.admin.profile_pic}}{% endif %}" id="card-avatar" class="img-thumbnail" alt="">
                 </div>
                 <div class="lh-1">
                     <div class="text-center fw-bold">{{ student.admin.username }}</div>

@@ -123,7 +123,7 @@ def add_student(request):
 
 def add_librarian(request):
     form = LibrarianForm(request.POST or None, request.FILES or None)
-    context = {'form': form, 'page_title': 'Add Librarian'}
+    context = {'form': form, 'page_title': 'Add accountant'}
     if request.method == 'POST':
         if form.is_valid():
             first_name = form.cleaned_data.get('first_name')
@@ -223,7 +223,7 @@ def manage_librarian(request):
     print(allibrarian)
     context = {
         'allibrarian': allibrarian,
-        'page_title': 'Manage Librarian'
+        'page_title': 'Manage accountant'
     }
     return render(request, "hod_template/manage_librarian.html", context)
 
@@ -318,7 +318,7 @@ def edit_librarian(request,lib_id):
     context = {
         'form': form,
         'lbrn': lbrn.id,
-        'page_title': 'Edit Librarian'
+        'page_title': 'Edit accountant'
     }
     if request.method == 'POST':
         if form.is_valid():
@@ -362,7 +362,7 @@ def edit_librarian(request,lib_id):
     return redirect("manage_librarian")
 
 def edit_student(request, student_id):
-    student = get_object_or_404(Student, admin=(CustomUser.objects.get(id=student_id).id))
+    student = get_object_or_404(Student, id=student_id)
     print(student)
     form = StudentForm(request.POST or None, instance=student)
     context = {
@@ -770,7 +770,7 @@ def delete_librarian(request, libr_id):
 
     print(libr)
     # libr.delete()
-    messages.success(request, "Librarian deleted successfully!")
+    messages.success(request, "accountant deleted successfully!")
     return redirect(reverse('manage_librarian'))
 
 

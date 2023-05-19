@@ -21,7 +21,6 @@
                                     <th>Full Name</th>
                                     <th>Email</th>
                                     <th>Gender</th>
-                                    <th>Course</th>
                                     <th>Avatar</th>
                                     <th>Edit</th>
                                 </tr>
@@ -30,9 +29,13 @@
                                 {% for l in allibrarian %}
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
-                                    <td>{{l.last_name}}, {{l.first_name}}</td>
+                                    <td>{{l.username}}</td>
                                     <td>{{l.email}}</td>
-                                    <td>{{l.gender}}</td>
+                                    {% if l.gender == 'F' %}
+                                    <td>Female</td>
+                                    {% else %}
+                                    <td>Male</td>
+                                    {% endif %}
                                     <td>
                                         {% if l.profile_pic == ""  %}
                                         No Image
@@ -41,9 +44,6 @@
                                             src="{{l.profile_pic}}" alt="">
                                         {% endif %}
                                     </td>
-                                    <script>
-                                        console.log("{{l.id}}")
-                                    </script>
                                     <td><a href="{% url 'edit_librarian' l.id %}" class="btn btn-primary">Edit</a> -
                                         <a href="{% url 'delete_librarian' l.id %}" class="btn btn-danger" onclick="return confirm('Are you sure about this ?')">Delete</a>
 

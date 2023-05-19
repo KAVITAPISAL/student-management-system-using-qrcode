@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 from . import hod_views, staff_views, student_views, views,account_views
 
 urlpatterns = [
+    
     path("", views.home, name='home'),
     path("signup", views.signup, name='signup'),    
     path("login_page", views.login_page, name='login_page'),    
@@ -30,7 +31,7 @@ urlpatterns = [
     path("logout_user/", views.logout_user, name='user_logout'),
     path("admin/home/", hod_views.admin_home, name='admin_home'),
     path("staff/add", hod_views.add_staff, name='add_staff'),
-    path("librarian/add", hod_views.add_librarian, name='add_librarian'),
+    path("accountant/add", hod_views.add_librarian, name='add_librarian'),
     path("course/add", hod_views.add_course, name='add_course'),
     path("send_student_notification/", hod_views.send_student_notification,
          name='send_student_notification'),
@@ -63,14 +64,14 @@ urlpatterns = [
     path("subject/add/", hod_views.add_subject, name='add_subject'),
     path("staff/manage/", hod_views.manage_staff, name='manage_staff'),
     path("student/manage/", hod_views.manage_student, name='manage_student'),
-    path("librarian/manage/",hod_views.manage_librarian,name="manage_librarian"),
+    path("accountant/manage/",hod_views.manage_librarian,name="manage_librarian"),
     path("course/manage/", hod_views.manage_course, name='manage_course'),
     path("subject/manage/", hod_views.manage_subject, name='manage_subject'),
     path("staff/edit/<int:staff_id>", hod_views.edit_staff, name='edit_staff'),
     path("staff/delete/<int:staff_id>",
          hod_views.delete_staff, name='delete_staff'),
     
-    path("librarian/delete/<int:libr_id>", hod_views.delete_librarian, name='delete_librarian'),     
+    path("accountant/delete/<int:libr_id>", hod_views.delete_librarian, name='delete_librarian'),     
 
     path("course/delete/<int:course_id>",
          hod_views.delete_course, name='delete_course'),
@@ -85,7 +86,7 @@ urlpatterns = [
          hod_views.delete_student, name='delete_student'),
     path("student/edit/<int:student_id>",
          hod_views.edit_student, name='edit_student'),
-    path("librarian/edit/<int:lib_id>",hod_views.edit_librarian, name='edit_librarian'),    
+    path("accountant/edit/<int:lib_id>",hod_views.edit_librarian, name='edit_librarian'),    
     path("course/edit/<int:course_id>",
          hod_views.edit_course, name='edit_course'),
     path("subject/edit/<int:subject_id>",
@@ -140,7 +141,7 @@ urlpatterns = [
 
      #librarian
 
-    path("library/home",account_views.manage_student,name='librarian_home'),  
+    path("accountant/home",account_views.manage_student,name='librarian_home'),  
     path("add_student_docs",student_views.add_student_docs,name='add_student_docs'),  
     path("manage_docs",student_views.manage_docs,name='manage_docs'), 
     path("edit_docs/<int:docid>",student_views.edit_docs,name="edit_docs") ,
@@ -155,7 +156,7 @@ urlpatterns = [
     path('student_data/<int:id>',account_views.student_data,name='student_data'),
     
     path('qr_code/', include('qr_code.urls', namespace="qr_code")),
-#     path('payfines<int:fineID>',librarian_views.payfine,name="payfines"),
+    path('contact_us',views.contact_form,name="contact_us"),
 #     path('paystatus<int:fineID>',librarian_views.pay_status,name="search"),
 #     path('all-fines',librarian_views.all_fines,name="all-fines"),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

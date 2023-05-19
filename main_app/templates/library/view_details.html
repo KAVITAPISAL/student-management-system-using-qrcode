@@ -16,7 +16,7 @@
 </style>
 <div class="container-fluid" id="e-details">
     <div class="d-flex w-100 justify-content-center my-4">
-        <img src="{% if student.avatar %}{{student.avatar.url}}{% endif %}" id="card-avatar" class="img-thumbnail" alt="">
+        <img src="{% if student.admin.profile_pic %}{{student.admin.profile_pic}}{% endif %}" id="card-avatar" class="img-thumbnail" alt="">
     </div>
     <div class="lh-1">
         <div class="row">
@@ -52,7 +52,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>  
 <script>
     
     var emp_edit_url = "{% url 'student_data' student.id %}"

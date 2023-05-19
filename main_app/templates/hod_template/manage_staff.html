@@ -30,9 +30,13 @@
                                 {% for staff in allStaff %}
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
-                                    <td>{{staff.last_name}}, {{staff.first_name}}</td>
+                                    <td>{{staff.username}}</td>
                                     <td>{{staff.email}}</td>
-                                    <td>{{staff.gender}}</td>
+                                    {% if l.gender == 'F' %}
+                                    <td>Female</td>
+                                    {% else %}
+                                    <td>Male</td>
+                                    {% endif %}
                                     <td>{{staff.staff.course.name}}</td>
                                     <td>
                                         {% if staff.profile_pic == ""  %}

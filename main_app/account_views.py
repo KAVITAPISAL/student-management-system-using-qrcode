@@ -108,6 +108,7 @@ def view_details(request, code = None):
         context['student'] = Student.objects.get(student_id=code)
         print(Student.objects.get(student_id=code).id)
         return render(request, 'library/view_details.html', context)
+    
 @login_required
 def student_data(request,id):
     context =context_data()

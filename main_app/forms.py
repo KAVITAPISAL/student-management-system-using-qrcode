@@ -2,7 +2,8 @@ from django import forms
 from django.forms.widgets import DateInput, TextInput
 
 from .models import *
-
+import re
+from django.core.validators import validate_email
 
 class FormSettings(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -12,13 +13,38 @@ class FormSettings(forms.ModelForm):
             field.field.widget.attrs['class'] = 'form-control'
 
 
+class PasswordField(forms.CharField):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.widget = forms.PasswordInput()
+
+    def validate(self, value):
+        super().validate(value)
+
+        # Perform custom password validation here
+        # Example validation rules: password length and complexity
+        min_length = 8
+        if len(value) < min_length:
+            raise forms.ValidationError(f"Password must be at least {min_length} characters long.")
+
+        # Add your additional password complexity rules here
+        # Example: at least one uppercase, one lowercase, and one digit
+        if not any(c.isupper() for c in value):
+            raise forms.ValidationError("Password must contain at least one uppercase letter.")
+        if not any(c.islower() for c in value):
+            raise forms.ValidationError("Password must contain at least one lowercase letter.")
+        if not any(c.isdigit() for c in value):
+            raise forms.ValidationError("Password must contain at least one digit.")
+
+
 class CustomUserForm(FormSettings):
     email = forms.EmailField(required=True)
     gender = forms.ChoiceField(choices=[('M', 'Male'), ('F', 'Female')])
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
     address = forms.CharField(widget=forms.Textarea)
-    password = forms.CharField(widget=forms.PasswordInput)
+    password = PasswordField()
+    mobile_no=forms.CharField(required=True)
     widget = {
         'password': forms.PasswordInput(),
     }
@@ -35,12 +61,27 @@ class CustomUserForm(FormSettings):
             if self.instance.pk is not None:
                 self.fields['password'].widget.attrs['placeholder'] = "Fill this only if you wish to update password"
 
+    def clean_mobile_no(self, *args, **kwargs):
+        
+        pattern = r'^\+?\d{1,4}?\s?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$'
+        mobile_no = self.cleaned_data.get('mobile_no')
+        if CustomUser.objects.filter(phone_number=mobile_no).exists():
+            raise forms.ValidationError("Phone no. exists")
+        elif not re.match(pattern, mobile_no):
+            raise forms.ValidationError("Invalid mobile number.")
+        return mobile_no
+    
     def clean_email(self, *args, **kwargs):
         formEmail = self.cleaned_data['email'].lower()
+        try:
+            validate_email(formEmail)
+        except forms.ValidationError:
+            raise forms.ValidationError("Invalid email address.")    
         if self.instance.pk is None:  # Insert
             if CustomUser.objects.filter(email=formEmail).exists():
                 raise forms.ValidationError(
                     "The given email is already registered")
+        
         else:  # Update
             dbEmail = self.Meta.model.objects.get(
                 id=self.instance.pk).admin.email.lower()
@@ -227,5 +268,13 @@ class StudentDocumentForm(forms.ModelForm):
         return document_pdf  
     class Meta:
         model = StudentDocuments
-        fields = ["document_name","document_pdf"]       
-       
+        fields = ["document_name","document_pdf"]    
+
+
+class ContactUsForm(forms.ModelForm) :
+
+    def __init__(self, *args, **kwargs):
+        super(ContactUsForm, self).__init__(*args, **kwargs)
+    class Meta:
+        model = ContactUs
+        fields = "__all__"

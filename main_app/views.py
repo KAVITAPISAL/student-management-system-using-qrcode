@@ -8,9 +8,16 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .EmailBackend import EmailBackend
 from .models import Attendance, Session, Subject
-
+from .forms import ContactUsForm
+from django.contrib import messages
 # Create your views here.
 
+def contact_form(request):
+    form=ContactUsForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        messages.success(request,"Message sent Successfully")
+        return redirect("/")
 
 def home(request):
     return render(request,'main_app/base.html')
@@ -21,13 +28,13 @@ def signup(request):
 def login_page(request):
     if request.user.is_authenticated:
         if request.user.user_type == '1':
-            return redirect(reverse("admin_home"))
+            return redirect("admin_home")
         elif request.user.user_type == '2':
-            return redirect(reverse("staff_home"))
+            return redirect("staff_home")
         elif request.user.user_type == '3':
-            return redirect(reverse("student_home"))
+            return redirect("student_home")
         else:
-            return redirect(reverse("librarian_home"))
+            return redirect("librarian_home")
     return render(request, 'main_app/login.html')
 
 

@@ -41,7 +41,8 @@ class Session(models.Model):
 
 class CustomUser(AbstractUser):
     USER_TYPE = ((1, "HOD"), (2, "Staff"), (3, "Student"),(4, "Librarian"))
-    GENDER = [("M", "Male"), ("F", "Female")]    
+    GENDER = [("M", "Male"), ("F", "Female")] 
+    mobile_no= models.CharField(max_length=15,unique=True,null=True,blank=True) 
     username = models.CharField(max_length=250,blank=True,null=True )  # Removed username, using email instead
     email = models.EmailField(unique=True)
     user_type = models.CharField(default=1, choices=USER_TYPE, max_length=1)
@@ -246,3 +247,12 @@ class Fine(models.Model):
 
     def __str__(self):
         return "{} payment->{}".format(self.student,self.amount)
+
+class ContactUs(models.Model):
+    name=models.CharField(max_length=30)
+    email=models.CharField(max_length=30)
+    subject=models.CharField(max_length=30)
+    message=models.CharField(max_length=500)
+
+    def __str__(self):
+        return "{} {}".format(self.name,self.email)

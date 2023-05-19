@@ -7,6 +7,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Student Management System</title>
+    
+  <link href="{% static 'dist/img/genba.jpg' %}" rel="icon">
+    {% if user.is_authenticated %}
+        
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Font Awesome -->
@@ -33,45 +37,71 @@
     
   <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-    <style>
-         .modal-sub-footer {
-            display: flex;
-            flex-wrap: wrap;
-            flex-shrink: 0;
-            align-items: center;
-            justify-content: flex-end;
-            padding: 0.75rem;
-            border-top: 1px solid #dee2e6;
-            border-bottom-right-radius: calc(0.3rem - 1px);
-            border-bottom-left-radius: calc(0.3rem - 1px);
-        }
-        #pre-loader {
-    display: flex;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    backdrop-filter: brightness(.5);
-    z-index: 99999;
-    align-items: center;
-    justify-content: center;
+  <style>
+    .modal-sub-footer {
+       display: flex;
+       flex-wrap: wrap;
+       flex-shrink: 0;
+       align-items: center;
+       justify-content: flex-end;
+       padding: 0.75rem;
+       border-top: 1px solid #dee2e6;
+       border-bottom-right-radius: calc(0.3rem - 1px);
+       border-bottom-left-radius: calc(0.3rem - 1px);
+   }
+   #pre-loader {
+display: flex;
+position: absolute;
+top: 0;
+left: 0;
+height: 100%;
+width: 100%;
+backdrop-filter: brightness(.5);
+z-index: 99999;
+align-items: center;
+justify-content: center;
 }
 body.loading {
-    overflow: hidden;
+overflow: hidden;
 }
 
 
-    </style>
+</style>
+  {% else %}
+    
+  <title>Arsha Bootstrap Template - Index</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <!-- <link href="static/assets/img/apple-touch-icon.png" rel="apple-touch-icon"> -->
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="static/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="static/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="static/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="static/assets/css/style.css" rel="stylesheet">
+  {% endif %}
+
+   
     {% block custom_css %}
 
     {% endblock custom_css %}
 </head>
 
 <body class="hold-transition  sidebar-mini layout-fixed">
+    {% if user.is_authenticated %}
     <div class="wrapper">
-        {% if user.is_authenticated %}
+        
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
             <!-- Left navbar links -->
@@ -113,9 +143,12 @@ body.loading {
                 </div><!-- /.container-fluid -->
             </div>
             <!-- /.content-header -->
-
-            <!-- Main content -->
             
+           
+                
+            
+            <!-- Main content -->
+<!--             
 <section class="content">
     <div class="container-fluid">
         <div class="row">
@@ -137,75 +170,19 @@ body.loading {
                 {% endfor %}
                 {% endif %}
             </div>
-            </div></div></div></section>
+            </div></div></div></section> -->
             {% block content %}
 
             {% endblock content %}
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
-        {% else %}
-        
-
-
-
-        <nav class="navbar navbar-dark navbar-expand-sm bg-dark fixed-top">
-        <div class="container-fluid">
-        <a href="/" class="navbar-brand">
-            <img src="{% static 'dist/img/genba.jpg' %}" class="img-fluid" width="50" height="30" alt="">
-         &nbsp;
-        Genba Sopanrao Moze College of Engineering Balewadi
-        </a>
-
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-
-        <div id="navbarCollapse" class="collapse navbar-collapse">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a href="" class="nav-link active">
-                    Home
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="" class="nav-link active">
-                    Blog
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="" class="nav-link active">
-                    About
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="" class="nav-link active">
-                    Contact
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{% url 'login_page' %}" type="button" class="nav-link btn btn-primary active">
-                    Login
-                </a>
-            </li>
-        </ul>
-        </div>
-
-
-
-        </div>
-        </nav>
-  
-        {% endif %}
-        
-      
        
 
         {% include "main_app/footer.html" %}
+        
+  
     </div>
-
-
     <div class="modal fade" id="uni_modal" role='dialog'>
         <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content rounded-0">
@@ -240,6 +217,13 @@ body.loading {
             </div>
         </div>
     </div>
+    {% else %}
+
+        {% include "default_home_template/index.html" %}
+  
+        {% endif %}
+
+
 
     <!-- ./wrapper -->
     <!-- jQuery -->
