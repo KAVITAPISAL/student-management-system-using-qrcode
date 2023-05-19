@@ -32,7 +32,12 @@
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{student.last_name}}, {{student.first_name}}</td>
                                     <td>{{student.email}}</td>
-                                    <td>{{student.gender}}</td>
+                                    {% if student.gender =='F' %}
+                                    <td>Female</td>
+                                    {% else %}
+                                    <td>Male</td>
+                                    {% endif %}
+                                    
                                     <td>{{student.student.course.name}}</td>
                                     <td>
                                         {% if student.profile_pic == ""  %}
