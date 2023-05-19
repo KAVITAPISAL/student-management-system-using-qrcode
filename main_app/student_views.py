@@ -213,11 +213,11 @@ def add_student_docs(request):
         form = StudentDocumentForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            messages.success("Documents added SuccessFully")
+            messages.success(request,"Documents added SuccessFully")
             return redirect("manage_docs")
     else:
-        form = StudentForm()
-    return render(request, 'add_student.html', {'form': form})
+        form = StudentDocumentForm()
+    return render(request, 'student_template/documents/student_add_docs.html', {'form': form})
 
 def manage_docs(request):
     docs=StudentDocuments.objects.all()
@@ -225,7 +225,7 @@ def manage_docs(request):
         'page_title': "Manage Documents",
         'docs':docs
     }
-    return render(request, 'library/manage_docs.html', context)
+    return render(request, 'student_template/documents/manage_docs.html', context)
 
 
 def edit_docs(request,docid):
