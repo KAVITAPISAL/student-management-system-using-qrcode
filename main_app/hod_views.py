@@ -311,12 +311,12 @@ def edit_staff(request, staff_id):
                 messages.error(request, "Could Not Update " + str(e))
 
         else:
-            messages.error(request, "Please fil form properly")
-    else:
-        # user = CustomUser.objects.get(id=staff.id)
-        # staff = Staff.objects.get(id=user.id)
-        return render(request, "hod_template/edit_staff_template.html", context)
-    return HttpResponse()
+            print(form.errors)
+            messages.error(request, form.errors)
+            # return redirect(reverse('edit_staff', args=[staff_id]))
+
+    return render(request, "hod_template/edit_staff_template.html", context)
+    # return HttpResponse()
     
 def edit_librarian(request,lib_id):
     lbrn = get_object_or_404(Librarian, admin=(CustomUser.objects.get(id=lib_id).id))
@@ -361,13 +361,8 @@ def edit_librarian(request,lib_id):
             except Exception as e:
                 messages.error(request, "Could Not Update " + str(e))
         else:
-            messages.error(request, "Please fil form properly")
-    else:
-        # staff = Librarian.objects.get(id=lib_id)
-       
-        # print(staff,user)
-        return render(request, "hod_template/edit_librarian.html", context)
-    return redirect("manage_librarian")
+            messages.error(request, form.errors)
+    return render(request, "hod_template/edit_librarian.html", context)
 
 def edit_student(request, student_id):
     student = get_object_or_404(Student, id=student_id)
@@ -418,9 +413,8 @@ def edit_student(request, student_id):
             except Exception as e:
                 messages.error(request, "Could Not Update " + str(e))
         else:
-            messages.error(request, "Please Fill Form Properly!")
-    else:
-        return render(request, "hod_template/edit_student_template.html", context)
+           messages.error(request, form.errors)
+    return render(request, "hod_template/edit_student_template.html", context)
 
 
 def edit_course(request, course_id):
