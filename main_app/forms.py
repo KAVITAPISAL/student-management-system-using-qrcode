@@ -93,7 +93,7 @@ class CustomUserForm(FormSettings):
 
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'email', 'gender',  'password','profile_pic', 'address' ]
+        fields = ['first_name', 'last_name', 'email',  'password','gender','profile_pic', 'address' ]
 
 
 class StudentForm(CustomUserForm):
