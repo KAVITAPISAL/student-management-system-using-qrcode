@@ -65,7 +65,7 @@ class CustomUserForm(FormSettings):
         
         pattern = r'^\+?\d{1,4}?\s?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$'
         mobile_no = self.cleaned_data.get('mobile_no')
-        if CustomUser.objects.filter(phone_number=mobile_no).exists():
+        if CustomUser.objects.filter(mobile_no=mobile_no).exists():
             raise forms.ValidationError("Phone no. exists")
         elif not re.match(pattern, mobile_no):
             raise forms.ValidationError("Invalid mobile number.")
