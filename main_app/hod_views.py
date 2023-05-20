@@ -92,6 +92,7 @@ def add_student(request):
             password = student_form.cleaned_data.get('password')
             course = student_form.cleaned_data.get('course')
             session = student_form.cleaned_data.get('session')
+            mobile_no = student_form.cleaned_data.get('mobile_no')
             passport = request.FILES['profile_pic']
             student_id=student_form.cleaned_data.get('student_id')
             fs = FileSystemStorage()
@@ -105,6 +106,7 @@ def add_student(request):
                 user.username=username
                 user.gender = gender
                 user.address = address
+                user.mobile_no=mobile_no
                 s=Student.objects.get(admin=user)
                 s.admin=user
                 s.session = session
@@ -133,6 +135,7 @@ def add_librarian(request):
             gender = form.cleaned_data.get('gender')
             password = form.cleaned_data.get('password')
             course = form.cleaned_data.get('course')
+            mobile_no = form.cleaned_data.get('mobile_no')
             session = form.cleaned_data.get('session')
             passport = request.FILES['profile_pic']
             fs = FileSystemStorage()
@@ -145,6 +148,7 @@ def add_librarian(request):
                 user.gender = gender
                 user.username=username
                 user.address = address
+                user.mobile_no=mobile_no
                 l=Librarian.objects.get(admin=user)
                 l.admin = user
                 l.save()
@@ -275,6 +279,7 @@ def edit_staff(request, staff_id):
             username = form.cleaned_data.get('username')
             email = form.cleaned_data.get('email')
             gender = form.cleaned_data.get('gender')
+            mobile_no = form.cleaned_data.get('mobile_no')
             password = form.cleaned_data.get('password') or None
             course = form.cleaned_data.get('course')
             passport = request.FILES.get('profile_pic') or None
@@ -293,6 +298,7 @@ def edit_staff(request, staff_id):
                     user.profile_pic = passport_url
                 user.first_name = first_name
                 user.last_name = last_name
+                user.mobile_no=mobile_no
                 user.gender = gender
                 user.address = address
                 staff.course = course
@@ -328,6 +334,7 @@ def edit_librarian(request,lib_id):
             username = form.cleaned_data.get('username')
             email = form.cleaned_data.get('email')
             gender = form.cleaned_data.get('gender')
+            mobile_no = form.cleaned_data.get('mobile_no')
             password = form.cleaned_data.get('password') or None
             passport = request.FILES.get('profile_pic') or None
             try:
@@ -344,6 +351,7 @@ def edit_librarian(request,lib_id):
                 user.first_name = first_name
                 user.last_name = last_name
                 user.gender = gender
+                user.mobile_no = user.mobile_no
                 user.address = address
                 lbrn.admin=user
                 user.save()
@@ -382,6 +390,7 @@ def edit_student(request, student_id):
             course = form.cleaned_data.get('course')
             session = form.cleaned_data.get('session')
             std_id = form.cleaned_data.get('student_id')
+            mobile_no = form.cleaned_data.get('mobile_no')
             passport = request.FILES.get('profile_pic') or None
             try:
                 user = CustomUser.objects.get(id=student_id)
@@ -398,6 +407,7 @@ def edit_student(request, student_id):
                 user.last_name = last_name
                 student.session = session
                 user.gender = gender
+                user.mobile_no=mobile_no
                 user.address = address
                 student.course = course
                 student.student_id=std_id
