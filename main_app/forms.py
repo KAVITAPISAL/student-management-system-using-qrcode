@@ -98,13 +98,15 @@ class CustomUserForm(FormSettings):
 
 class StudentForm(CustomUserForm):
     student_id = forms.CharField(max_length=250, label="Student ID")
+    fee_amount = forms.CharField(max_length=250, label="Amount")
+    fees_paid = forms.CheckboxInput()
     def __init__(self, *args, **kwargs):
         super(StudentForm, self).__init__(*args, **kwargs)
 
     class Meta(CustomUserForm.Meta):
         model = Student
         fields = CustomUserForm.Meta.fields + \
-            ['course', 'session','student_id']
+            ['course', 'session','student_id','fee_amount','fees_paid']
 
     def clean_student_id(self):
         student_id = self.cleaned_data['student_id']
@@ -220,7 +222,8 @@ class StudentEditForm(CustomUserForm):
 
     class Meta(CustomUserForm.Meta):
         model = Student
-        fields = CustomUserForm.Meta.fields 
+        fields = CustomUserForm.Meta.fields + \
+            ['course', 'session','student_id','fee_amount','fees_paid']
 
 
 class StaffEditForm(CustomUserForm):

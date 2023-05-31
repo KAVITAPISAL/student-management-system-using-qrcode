@@ -138,6 +138,10 @@ urlpatterns = [
          name="student_view_notification"),
     path('student/view/result/', student_views.student_view_result,
          name='student_view_result'),
+    path('student/pay/fee/<int:fineID>', student_views.payfees,
+         name='student_pay_fees'),
+    path('student/pay/fee/status/<int:fineID>', student_views.pay_status,
+         ),     
 
      #librarian
 

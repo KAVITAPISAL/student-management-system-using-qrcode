@@ -417,6 +417,16 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    {% url 'admin_notify_student' as admin_notify_student %}
+                    <a href="{{admin_notify_student}}" class="nav-link {% if admin_notify_student == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Notify Student
+
+                        </p>
+                    </a>
+                </li>
 {% else %}
     <!-- Brand Logo -->
     <a href="" class="brand-link">
@@ -519,6 +529,15 @@
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                            Feedback
+
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'student_pay_fees' request.user.id %}" class="nav-link {% if student_pay_fees == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                           Pay fees
 
                         </p>
                     </a>

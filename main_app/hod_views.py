@@ -84,6 +84,7 @@ def add_student(request):
     context = {'form': student_form, 'page_title': 'Add Student'}
     if request.method == 'POST':
         if student_form.is_valid():
+            print(student_form.cleaned_data3)
             first_name = student_form.cleaned_data.get('first_name')
             last_name = student_form.cleaned_data.get('last_name')
             address = student_form.cleaned_data.get('address')
@@ -92,6 +93,8 @@ def add_student(request):
             password = student_form.cleaned_data.get('password')
             course = student_form.cleaned_data.get('course')
             session = student_form.cleaned_data.get('session')
+            fee_amount = student_form.cleaned_data.get('fee_amount')
+            fees_paid = student_form.cleaned_data.get('fees_paid')
             mobile_no = student_form.cleaned_data.get('mobile_no')
             passport = request.FILES['profile_pic']
             student_id=student_form.cleaned_data.get('student_id')
@@ -111,7 +114,9 @@ def add_student(request):
                 s.admin=user
                 s.session = session
                 s.course = course
+                s.fee_amount=fee_amount
                 s.student_id=student_id
+                s.fees_paid=fees_paid
                 s.save()
                 user.save()
                 messages.success(request, "Successfully Added")
@@ -385,7 +390,11 @@ def edit_student(request, student_id):
             course = form.cleaned_data.get('course')
             session = form.cleaned_data.get('session')
             std_id = form.cleaned_data.get('student_id')
+            
+            fee_amount = student_form.cleaned_data.get('fee_amount')
+            fees_paid = student_form.cleaned_data.get('fees_paid')
             mobile_no = form.cleaned_data.get('mobile_no')
+            
             passport = request.FILES.get('profile_pic') or None
             try:
                 user = CustomUser.objects.get(id=student_id)
@@ -406,6 +415,8 @@ def edit_student(request, student_id):
                 user.address = address
                 student.course = course
                 student.student_id=std_id
+                student.fee_amount=fee_amount
+                student.fees_paid=fees_paid
                 user.save()
                 student.save()
                 messages.success(request, "Successfully Updated")

@@ -40,6 +40,8 @@
                               <th class="text-center">Created at</th>
                               <th class="text-center">Name</th>
                               <th class="text-center">Course</th>
+                              <th>Fees Amount</th>
+                              <th class="text-center">Fees Paid Status</th>
                               <th class="text-center">View Data</th>
                               <th class="text-center">View ID</th>
                           </tr>
@@ -54,6 +56,16 @@
                               <td class="">{{student.admin.username}}</td>
                               <td class="">{{student.course}}
                               </td>
+                              <td class="">{{student.fee_amount}}
+                            </td>
+                              
+                              {% if student.fees_paid == True %}
+                                <td class="">Paid</td>
+                                {% else %}
+                                <td class="">Unpaid</td>
+                              {% endif %}
+                                
+                             
                               <td>
                                  <a class="btn btn-info view_detail" type="button" href="javascript:void(0)" data-url="{% url 'view-details' student.student_id %}" >View Data</a></td>
                                  <td><a class="btn btn-warning view_card" type="button" href="javascript:void(0)" data-url="{% url 'view-card' student.id %}" >View ID</a>

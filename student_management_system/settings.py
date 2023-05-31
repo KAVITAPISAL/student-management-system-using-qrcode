@@ -24,7 +24,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = os.environ.get('MY_SECRET_KEY')  # Consider using your secret key
-SECRET_KEY = "asdfghjklkjhgfdsasdfghjklkjhgfdssdfghjklkjhgfdsa"  # Consider using your secret key
+SECRET_KEY = "8BEBT8UMiKZ30NOgZTiYtlN4"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'qr_code',
     # My Apps
-    'main_app.apps.MainAppConfig'
+    'main_app.apps.MainAppConfig',
+    'razorpay'
 ]
 
 MIDDLEWARE = [
@@ -178,5 +179,5 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # DATABASES['default'].update(prod_db)
 
 
-RAZORPAY_KEY_ID="wertyuiop"
-RAZORPAY_KEY_SECRET="asdfghjk"
+RAZORPAY_KEY_ID="rzp_test_IxML5gGIw4hDax"
+RAZORPAY_KEY_SECRET="8BEBT8UMiKZ30NOgZTiYtlN4"

@@ -16,6 +16,12 @@ from .models import *
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 
+from django.contrib.auth.decorators import login_required
+
+from django.utils import timezone
+
+import datetime
+
 import traceback
 def student_home(request):
     student = get_object_or_404(Student, admin=request.user)
@@ -300,5 +306,74 @@ def delete_docs(request,docid):
     doc.delete()
     messages.success(request, "Documents deleted successfully!")
     return redirect(reverse('manage_docs'))
+import razorpay
+
+from django.conf import settings
+razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+
+@login_required(login_url='login_page')
+def payfees(request,fineID):
+    std=Student.objects.get(admin=CustomUser.objects.get(id=fineID))
+    order_amount = int(std.fee_amount)*100
+    order_currency = 'INR'
+    order_receipt = std.id
+    # print(tetime_of_payment)
+    fee_invoice=None
+    if std.fees_paid == True:
+        fee_invoice=Fee.objects.get(student=std)
+     
+    print(fee_invoice)    
+    razorpay_order=razorpay_client.order.create(dict(amount=order_amount, currency=order_currency, ))
+    print(razorpay_order)
+    
+    
+    return render(request,'student_template/pay_fees.html',
+    {'amount':order_amount,'razor_id':settings.RAZORPAY_KEY_ID,
+    'reciept':razorpay_order['id'],
+    'amount_displayed':order_amount / 100,
+    'address':'a custom address',
+    'fine':std, 
+    'paid_fees':fee_invoice
+    })
 
 
+import traceback
+
+@login_required(login_url='login_page')
+def pay_status(request,fineID):
+    std=Student.objects.get(id=fineID).admin.id
+    if request.method == 'POST':
+        params_dict={
+            'razorpay_payment_id':request.POST['razorpay_payment_id'],
+            'razorpay_order_id':request.POST['razorpay_order_id'],
+            'razorpay_signature':request.POST['razorpay_signature'],
+        }
+        try:
+            status=razorpay_client.utility.verify_payment_signature(params_dict)
+            print(status)
+            # if status is None: #for production
+            #     fine=Fine.objects.get(id=fineID)
+            #     fine.paid=True
+            #     fine.datetime_of_payment=timezone.now()
+            #     fine.razorpay_payment_id=request.POST['razorpay_payment_id']
+            #     fine.razorpay_signature=request.POST['razorpay_signature']
+            #     fine.razorpay_order_id = request.POST['razorpay_order_id']
+            #     fine.save()
+            fine=Fee()
+            fine.student=Student.objects.get(id=fineID)
+            fine.paid=True
+            fine.datetime_of_payment=timezone.now()
+            fine.razorpay_payment_id=request.POST['razorpay_payment_id']
+            fine.razorpay_signature=request.POST['razorpay_signature']
+            fine.razorpay_order_id = request.POST['razorpay_order_id']
+            
+            stdnt=Student.objects.get(id=fineID)
+            stdnt.fees_paid=True
+            stdnt.save()
+            fine.save()
+                
+            messages.success(request,'Payment Succesfull')
+        except Exception:
+            print(traceback.format_exc())
+            messages.error(request,'Payment Failure')
+    return redirect('/student/pay/fee/'+ str(std))    

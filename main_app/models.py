@@ -7,6 +7,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 
+from django.utils import timezone
 
 class CustomUserManager(UserManager):
     def _create_user(self, email, password, **extra_fields):
@@ -77,6 +78,9 @@ class Student(models.Model):
     course = models.ForeignKey(Course, on_delete=models.DO_NOTHING, null=True, blank=False)
     session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
     student_id=models.CharField(max_length=120,null=True, blank=False)
+    
+    fees_paid=models.BooleanField(default=False)
+    fee_amount=models.CharField(max_length=20,null=True,blank=False)
 
     def __str__(self):
         return self.admin.email
@@ -228,7 +232,7 @@ class StudentDocuments(models.Model):
         return self.student.student_id
 
     
-class Fine(models.Model):
+class Fee(models.Model):
     student=models.ForeignKey(Student,on_delete=models.CASCADE)
     amount=models.DecimalField(default=0.00,max_digits=10,decimal_places=2)
     paid=models.BooleanField(default=False)
@@ -242,7 +246,7 @@ class Fine(models.Model):
 
     def save(self, *args, **kwargs):
         if self.order_id is None :
-            self.order_id = "{}_{}_{}".format(self.student.department,self.student.student_id.username,timezone.now().strftime('%H%M%S') )  
+            self.order_id = "{}_{}_{}".format(self.student.course,self.student.student_id,timezone.now().strftime('%H%M%S') )  
         return super().save(*args, **kwargs)
 
     def __str__(self):
