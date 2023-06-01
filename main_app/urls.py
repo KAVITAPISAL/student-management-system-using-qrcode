@@ -141,8 +141,9 @@ urlpatterns = [
     path('student/pay/fee/<int:fineID>', student_views.payfees,
          name='student_pay_fees'),
     path('student/pay/fee/status/<int:fineID>', student_views.pay_status,
-         ),     
-
+         ), 
+     path('student/fee/status', student_views.fee_status,name='student_fee_status'
+     ), 
      #librarian
 
     path("accountant/home",account_views.manage_student,name='librarian_home'),  
@@ -150,6 +151,8 @@ urlpatterns = [
     path("manage_docs",student_views.manage_docs,name='manage_docs'), 
     path("edit_docs/<int:docid>",student_views.edit_docs,name="edit_docs") ,
     path("delete_docs/<int:docid>",student_views.delete_docs,name="delete_docs") ,
+    path("student_add_payments",account_views.student_add_payments,name="student_add_payments") ,
+    path("manage_student_payment_details",account_views.manage_student_payment_details,name="manage_student_payment_details") ,
     
     
 

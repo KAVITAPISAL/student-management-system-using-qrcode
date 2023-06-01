@@ -78,9 +78,6 @@ class Student(models.Model):
     course = models.ForeignKey(Course, on_delete=models.DO_NOTHING, null=True, blank=False)
     session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
     student_id=models.CharField(max_length=120,null=True, blank=False)
-    
-    fees_paid=models.BooleanField(default=False)
-    fee_amount=models.CharField(max_length=20,null=True,blank=False)
 
     def __str__(self):
         return self.admin.email
@@ -233,7 +230,10 @@ class StudentDocuments(models.Model):
 
     
 class Fee(models.Model):
+    name=models.CharField(max_length=500, null=True, blank=True, default=None)
     student=models.ForeignKey(Student,on_delete=models.CASCADE)
+    fee_type=models.CharField(max_length=500, null=True, blank=True, default=None)
+
     amount=models.DecimalField(default=0.00,max_digits=10,decimal_places=2)
     paid=models.BooleanField(default=False)
     order_id = models.CharField(unique=True, max_length=500, null=True, blank=True, default=None) 
@@ -251,6 +251,7 @@ class Fee(models.Model):
 
     def __str__(self):
         return "{} payment->{}".format(self.student,self.amount)
+
 
 class ContactUs(models.Model):
     name=models.CharField(max_length=30)

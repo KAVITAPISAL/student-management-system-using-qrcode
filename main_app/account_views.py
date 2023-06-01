@@ -23,7 +23,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib import auth
 from student_management_system import settings
-
+import traceback
 def context_data():
     context = {
         'page_name' : '',
@@ -130,3 +130,50 @@ def delete_student(request, pk=None):
             resp['msg'] = "Student has failed to delete."
 
     return HttpResponse(json.dumps(resp), content_type="application/json")
+
+
+def student_add_payments(request):
+    form = AddNewPaymentForm()
+    if request.method == 'POST':
+        form = AddNewPaymentForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+            name = form.cleaned_data.get('name')
+            student = form.cleaned_data.get('student')
+            amount = form.cleaned_data.get('amount')
+            fee_type = form.cleaned_data.get('fee_type')
+            try:
+                print(student.student_id)
+                subject = Fee()
+                
+                if name == '1':
+                    subject.name= 'Collage Fee'
+                    subject.fee_type = " - "
+                elif name == '2':
+                    subject.name = 'Semester Exam Fee'
+                    subject.fee_type = "Semester "+ fee_type   
+                subject.student = student  
+                  
+                subject.amount = amount
+                subject.save()
+                messages.success(request, "Successfully Added")
+                return redirect(reverse('manage_student_payment_details'))
+
+            except Exception as e:
+                print(traceback.format_exc())
+                messages.error(request, "Could Not Add " + str(e))
+        else:
+            messages.error(request, "Fill Form Properly")
+    context = {
+        "form":form,
+        'page_title': 'Add New Payment'
+        }    
+    return render(request, 'library/add_student_payment.html', context)
+
+def manage_student_payment_details(request):
+    std=Fee.objects.all()
+    context={
+        "std":std
+    }
+    return render(request, 'library/student_payment_details.html', context)
+

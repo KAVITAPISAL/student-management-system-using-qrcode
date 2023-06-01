@@ -132,3 +132,9 @@ def pay_status(request,fineID):
         except:
             messages.error(request,'Payment Failure')
     return redirect('my-fines')
+
+
+
+
+
+

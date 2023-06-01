@@ -40,8 +40,6 @@
                               <th class="text-center">Created at</th>
                               <th class="text-center">Name</th>
                               <th class="text-center">Course</th>
-                              <th>Fees Amount</th>
-                              <th class="text-center">Fees Paid Status</th>
                               <th class="text-center">View Data</th>
                               <th class="text-center">View ID</th>
                           </tr>
@@ -56,14 +54,6 @@
                               <td class="">{{student.admin.username}}</td>
                               <td class="">{{student.course}}
                               </td>
-                              <td class="">{{student.fee_amount}}
-                            </td>
-                              
-                              {% if student.fees_paid == True %}
-                                <td class="">Paid</td>
-                                {% else %}
-                                <td class="">Unpaid</td>
-                              {% endif %}
                                 
                              
                               <td>

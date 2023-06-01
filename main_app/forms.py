@@ -38,17 +38,19 @@ class PasswordField(forms.CharField):
 
 
 class CustomUserForm(FormSettings):
-    email = forms.EmailField(required=True)
-    gender = forms.ChoiceField(choices=[('M', 'Male'), ('F', 'Female')])
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
-    address = forms.CharField(widget=forms.Textarea)
+    email = forms.EmailField(required=True)
     password = PasswordField()
+    gender = forms.ChoiceField(choices=[('M', 'Male'), ('F', 'Female')])
+    
+    profile_pic = forms.ImageField()
+    address = forms.CharField(widget=forms.Textarea)
+   
     mobile_no=forms.CharField(required=True)
     widget = {
         'password': forms.PasswordInput(),
     }
-    profile_pic = forms.ImageField()
 
     def __init__(self, *args, **kwargs):
         super(CustomUserForm, self).__init__(*args, **kwargs)
@@ -93,20 +95,19 @@ class CustomUserForm(FormSettings):
 
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'email',  'password','gender','profile_pic', 'address' ]
+        fields = ['first_name', 'last_name', 'email',  'password','gender','profile_pic', 'address','mobile_no' ]
 
 
 class StudentForm(CustomUserForm):
     student_id = forms.CharField(max_length=250, label="Student ID")
-    fee_amount = forms.CharField(max_length=250, label="Amount")
-    fees_paid = forms.CheckboxInput()
+    
     def __init__(self, *args, **kwargs):
         super(StudentForm, self).__init__(*args, **kwargs)
 
     class Meta(CustomUserForm.Meta):
         model = Student
         fields = CustomUserForm.Meta.fields + \
-            ['course', 'session','student_id','fee_amount','fees_paid']
+            ['course', 'session','student_id']
 
     def clean_student_id(self):
         student_id = self.cleaned_data['student_id']
@@ -223,7 +224,7 @@ class StudentEditForm(CustomUserForm):
     class Meta(CustomUserForm.Meta):
         model = Student
         fields = CustomUserForm.Meta.fields + \
-            ['course', 'session','student_id','fee_amount','fees_paid']
+            ['course', 'session','student_id']
 
 
 class StaffEditForm(CustomUserForm):
@@ -281,3 +282,55 @@ class ContactUsForm(forms.ModelForm) :
     class Meta:
         model = ContactUs
         fields = "__all__"
+
+
+class AddNewPaymentForm(forms.ModelForm):
+    # student_choices = [(student.student_id, student.student_id) for student in Student.objects.all()]
+    # student =forms.ChoiceField(choices =student_choices)
+
+    select=(
+        (" "," "),
+        ("1","Collage Fee"),
+        ("2","Semester Exam Fee"),
+        
+        )
+    sem=(
+        (" "," "),
+        ("1","1"),
+        ("2","2"),
+        ("3","3"),
+        ("4","4"),
+        ("5","5"),
+        ("6","6"),
+        
+        )
+    name =forms.ChoiceField(choices =select)
+    fee_type=forms.ChoiceField(choices =sem,label="Semester")
+
+    def __init__(self, *args, **kwargs):
+        super(AddNewPaymentForm, self).__init__(*args, **kwargs)
+
+        self.fields['student'] = forms.ChoiceField(choices=self.get_student_choices())
+
+    def get_student_choices(self):
+        student_choices = [(student.student_id, student.student_id) for student in Student.objects.all()]
+        return student_choices
+    class Meta:
+        model = Fee
+        fields = ['name','fee_type','student', 'amount'] 
+
+    
+    def clean_student(self):
+        student = self.cleaned_data['student']
+        std=Student.objects.get(student_id=student)
+        print(std.id)
+        return std 
+     
+    def clean_amount(self):
+        amount = self.cleaned_data['amount']
+        if amount <=0:
+            raise forms.ValidationError("Enter Amount ")
+
+
+        return amount  
+        

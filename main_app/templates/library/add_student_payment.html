@@ -1,0 +1,44 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+{% block page_title %}{{page_title}}{% endblock page_title %}
+
+{% block content %}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">{{page_title}}</h3>
+                    </div>
+
+                    {% include "main_app/form_template.html" with messages=messages  form=form button_text="Add"%}
+                </div>
+                <!-- /.card -->
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Attach event listener to the select element
+    $('#id_name').on('change', function() {
+        // Perform actions when the selection changes
+        if ($(this).val() == 1)
+        {
+            $('#id_fee_type').parent().hide()
+            $('#id_fee_type').prop("required",false)
+        }
+        else{
+            $('#id_fee_type').parent().show()
+            $('#id_fee_type').attr("required",true)
+        }
+        console.log('Selection changed!',$(this).val() == 1);
+        // console.log('Selected value:', this.value);
+        // console.log('Selected text:', this.options[this.selectedIndex].text);
+    });
+</script>
+{% endblock content %}

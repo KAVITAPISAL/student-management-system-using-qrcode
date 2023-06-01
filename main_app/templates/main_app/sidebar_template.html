@@ -427,6 +427,15 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    {% url 'manage_student_payment_details' as manage_student_payment_details %}
+                    <a href="{{manage_student_payment_details}}" class="nav-link {% if manage_student_payment_details == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                           Student Transaction
+                        </p>
+                    </a>
+                </li>
 {% else %}
     <!-- Brand Logo -->
     <a href="" class="brand-link">
@@ -534,7 +543,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'student_pay_fees' request.user.id %}" class="nav-link {% if student_pay_fees == request.path %} active {% endif %}">
+                    <a href="{% url 'student_fee_status' %}" class="nav-link {% if student_fee_status == request.path %} active {% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                            Pay fees

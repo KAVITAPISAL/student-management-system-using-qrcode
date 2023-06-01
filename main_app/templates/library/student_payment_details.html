@@ -11,6 +11,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">{{page_title}}</h3>
+                        <a type="button" class="btn btn-info" href="{% url 'student_add_payments' %}">Add New Payment</a>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -23,7 +24,6 @@
                                     <th>Student</th>
                                     <th>Amount</th>
                                     <th>Paid</th>
-                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -43,13 +43,16 @@
                                     
                                     {% if s.paid %}
                                         <td>paid</td>
-                                       <td>Paid on : {{s.datetime_of_payment}}</td>  
                                         {% else %}
                                         <td>not paid</td>
-                                        <td>
-                                            <a href="{% url 'student_pay_fees' s.id %}"  type="button" class="btn btn-warning">Pay</a>
-                                        </td>  
-                                    {% endif %}                              
+                                    {% endif %}
+                                        
+                                    <!-- <td>{{s.order_id}}</td>
+                                    <td>{{s.datetime_of_payment}}</td>
+                                    <td>{{s.razorpay_order_id}}</td>
+                                    <td>{{s.razorpay_payment_id}}</td>
+                                    <td>{{s.razorpay_signature}}</td> -->
+                                
                             
                                 </tr>
                                 {% endfor %}

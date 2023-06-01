@@ -313,16 +313,17 @@ razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZOR
 
 @login_required(login_url='login_page')
 def payfees(request,fineID):
-    std=Student.objects.get(admin=CustomUser.objects.get(id=fineID))
-    order_amount = int(std.fee_amount)*100
+    # student=Student.objects.get(admin=fineID)
+    print(fineID)
+    std=Fee.objects.get(id=fineID) 
+    order_amount = int(std.amount)*100
     order_currency = 'INR'
     order_receipt = std.id
     # print(tetime_of_payment)
-    fee_invoice=None
-    if std.fees_paid == True:
-        fee_invoice=Fee.objects.get(student=std)
-     
-    print(fee_invoice)    
+    # fee_invoice=None
+    # if std.fees_paid == True:
+    #     fee_invoice=Fee.objects.get(id=std)     
+    # print(fee_invoice)    
     razorpay_order=razorpay_client.order.create(dict(amount=order_amount, currency=order_currency, ))
     print(razorpay_order)
     
@@ -333,7 +334,7 @@ def payfees(request,fineID):
     'amount_displayed':order_amount / 100,
     'address':'a custom address',
     'fine':std, 
-    'paid_fees':fee_invoice
+    'paid_fees':std
     })
 
 
@@ -341,7 +342,6 @@ import traceback
 
 @login_required(login_url='login_page')
 def pay_status(request,fineID):
-    std=Student.objects.get(id=fineID).admin.id
     if request.method == 'POST':
         params_dict={
             'razorpay_payment_id':request.POST['razorpay_payment_id'],
@@ -359,21 +359,28 @@ def pay_status(request,fineID):
             #     fine.razorpay_signature=request.POST['razorpay_signature']
             #     fine.razorpay_order_id = request.POST['razorpay_order_id']
             #     fine.save()
-            fine=Fee()
-            fine.student=Student.objects.get(id=fineID)
+            
+            fine=Fee.objects.get(id=fineID)
             fine.paid=True
             fine.datetime_of_payment=timezone.now()
             fine.razorpay_payment_id=request.POST['razorpay_payment_id']
             fine.razorpay_signature=request.POST['razorpay_signature']
             fine.razorpay_order_id = request.POST['razorpay_order_id']
             
-            stdnt=Student.objects.get(id=fineID)
-            stdnt.fees_paid=True
-            stdnt.save()
+            
+            # stdnt.save()
             fine.save()
                 
             messages.success(request,'Payment Succesfull')
         except Exception:
             print(traceback.format_exc())
             messages.error(request,'Payment Failure')
-    return redirect('/student/pay/fee/'+ str(std))    
+    return redirect('/student/fee/status')    
+
+
+def fee_status(request):
+    std=Fee.objects.filter(student=Student.objects.get(admin=request.user))
+    context={
+        "std":std
+    }
+    return render(request, 'student_template/fee_status.html', context)
